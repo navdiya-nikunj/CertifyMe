@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  Container,
-  Certi,
-  FormDiv,
-  ButtonDiv,
-} from "../../styles/jsx/verify.styles";
+import { Container, Certi } from "../../styles/jsx/verify.styles";
 import CertiABI from "../../certificate.json";
 import Btn from "../atoms/Button";
 import TextField from "@mui/material/TextField";
@@ -72,20 +67,17 @@ export default function VerifyCertificate() {
       setVerificationResult("Not Verified");
       if (!Web3.ethereum) {
         setVerificationResult("");
-        toast.error(
-          "You don't have any web3 wallet or web3 instance!! Or you haven't added the certificateID",
-          {
-            position: "bottom-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Slide,
-          }
-        );
+        toast.error("You don't have any web3 wallet or web3 instance!! Or you haven't added the certificateID", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Slide,
+        });
       } else {
         toast.error("Not verified Certificate or ID.", {
           position: "bottom-center",
@@ -103,57 +95,42 @@ export default function VerifyCertificate() {
   };
 
   return (
-    <>
-      {isLoading ? (
-        <LinearProgress />
-      ) : (
-        <>
-          <Container>
-            <FormDiv>
-              <h2>Verify Certificate</h2>
-              <div>
-                <TextField
-                  sx={{
-                    ...textfieldTheme,
-                    backgroundColor: "white",
-                    width: "100%",
-                  }}
-                  type="text"
-                  name="CertificateId"
-                  value={certificateId}
-                  onChange={handleChange}
-                  label="Certificate ID"
-                  placeholder="0x23d6E35159Cc6979667577d50F1148f30bb8E01d/{id}"
-                  required
-                />
-                <ButtonDiv>
-                  <Btn
-                    text="Verify"
-                    type="button"
-                    onClick={handleVerification}
-                  />
-                </ButtonDiv>
-              </div>
-            </FormDiv>
-            {verificationResult && <p>{verificationResult}</p>}
-            {blockExplorerLink && (
-              <a href={blockExplorerLink} target="_blank" rel="noreferrer">
-                View on Etherscan
-              </a>
-            )}
-            {openseaLink && (
-              <a href={openseaLink} target="_blank" rel="noreferrer">
-                View on OpenSea
-              </a>
-            )}
-            {image && (
-              <Certi>
-                <img src={image} alt="certificate" />
-              </Certi>
-            )}
-          </Container>
-          <ToastContainer />
-        </>
+    <>{isLoading ? (<LinearProgress />):(
+      <>
+      <Container>
+        <h2>Verify Certificate</h2>
+        <div>
+          <TextField
+            sx={textfieldTheme}
+            type="text"
+            name="CertificateId"
+            value={certificateId}
+            onChange={handleChange}
+            label="Certificate ID"
+            placeholder="0x23d6E35159Cc6979667577d50F1148f30bb8E01d/{id}"
+            required
+          />
+        <Btn text="Verify" type="button" onClick={handleVerification} />
+        </div>
+        {verificationResult && <p>{verificationResult}</p>}
+        {blockExplorerLink && (
+          <a href={blockExplorerLink} target="_blank" rel="noreferrer">
+            View on Etherscan
+          </a>
+        )}
+        {openseaLink && (
+          <a href={openseaLink} target="_blank" rel="noreferrer">
+            View on OpenSea
+          </a>
+        )}
+        {image && (
+          <Certi>
+            <img src={image} alt="certificate" />
+          </Certi>
+        )}
+      </Container>
+      <ToastContainer />
+      </>
       )}
     </>
   );

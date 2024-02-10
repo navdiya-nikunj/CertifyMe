@@ -24,14 +24,13 @@ function App() {
         <Route
           path="profile"
           element={
-            // <ProtectedRoute user={studentUser || instituteUser}>
-            //   {studentUser ? (
-            //     <StudentProfile student={studentUser} />
-            //   ) : (
-            //     <InstituteProfile institute={instituteUser} />
-            //   )}
-            // </ProtectedRoute>
-            <InstituteProfile/>
+            <ProtectedRoute user={studentUser || instituteUser}>
+              {studentUser ? (
+                <StudentProfile student={studentUser} />
+              ) : (
+                <InstituteProfile institute={instituteUser} />
+              )}
+            </ProtectedRoute>
           }
         />
       </Routes>

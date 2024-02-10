@@ -5,10 +5,12 @@ import axios from "../../axiosConfig";
 import GerenrateCertiTemplate from "./generateCertiTemplate";
 import GenerateCertificate from "./generateCertificate";
 
-
 export default function InstituteProfile({ institute }) {
   const [certificateTemplates, setCertificateTemplates] = useState([]);
-  const [showgenteratecirtificatetemplate, setShowgenteratecirtificatetemplate] = useState(false);
+  const [
+    showgenteratecirtificatetemplate,
+    setShowgenteratecirtificatetemplate,
+  ] = useState(false);
 
   const getCertificateTemplates = async () => {
     // await axios
@@ -27,22 +29,29 @@ export default function InstituteProfile({ institute }) {
   }
   return (
     <div>
-      {/* {institute.instituteName}'s Profile page */}
+      {institute.instituteName}'s Profile page
       <Button type="button" text="click me" onClick={handleClick} />
       <div>
         <p>Available templets</p>
-        { certificateTemplates.length !== 0 && (
+        {certificateTemplates.length !== 0 &&
           certificateTemplates.map((template) => (
             <div>
               <p>Certificate Name: {template.certificateName}</p>
               <p>Certificate Description: {template.certificateDesc}</p>
-              <Button type="button" text="Generate certificate" onClick={() => <GenerateCertificate certificate={template}/>}/>
+              <Button
+                type="button"
+                text="Generate certificate"
+                onClick={() => <GenerateCertificate certificate={template} />}
+              />
             </div>
-          )))
-        }
+          ))}
       </div>
-      <Button type="button" text="Generate certificate templet" onClick={() => setShowgenteratecirtificatetemplate(true)}/>
-      {showgenteratecirtificatetemplate && <GerenrateCertiTemplate/>}
+      <Button
+        type="button"
+        text="Generate certificate templet"
+        onClick={() => setShowgenteratecirtificatetemplate(true)}
+      />
+      {showgenteratecirtificatetemplate && <GerenrateCertiTemplate />}
     </div>
   );
 }

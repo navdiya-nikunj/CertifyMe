@@ -55,6 +55,7 @@ export default function GerenrateTemplate() {
   return (
     <StyledDiv>
       {/* <Navbar/> */}
+      <div>
       <form onSubmit={handleSubmit}>
         <TextField
           type="text"
@@ -103,6 +104,7 @@ export default function GerenrateTemplate() {
         />
         <Button type="submit" text="Submit" />
       </form>
+      </div>
     </StyledDiv>
   );
 }

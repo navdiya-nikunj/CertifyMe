@@ -18,6 +18,7 @@ const theme = {
 
     primary: "#F5F5F5",
     secondary: "#017ECB",
+    shadow: "#bdb5b5",
     text: "#000",
     secondaryText: "#fff",
     // primaryText: "#212d40",

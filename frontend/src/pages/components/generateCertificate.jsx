@@ -198,43 +198,45 @@ export default function GenerateCertificate() {
       ) : (
         <>
           <StyledDiv>
-            <form method="post" onSubmit={handleSubmit}>
-              <TextField
-                type="text"
-                name="studentName"
-                value={formData.studentName}
-                onChange={handleChange}
-                label="Student Name"
-                required
-              />
-              <TextField
-                type="text"
-                name="studentWallet"
-                value={formData.studentWallet}
-                onChange={handleChange}
-                label="Student e-Wallet Address"
-                required
-              />
-              <TextField
-                type="text"
-                name="eventName"
-                value={formData.eventName}
-                onChange={handleChange}
-                label="Event Name"
-              />
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DateField", "DateField"]}>
-                  <DateField
-                    label="Date"
-                    value={date}
-                    onChange={(newValue) => setDate(newValue)}
-                    format="LL"
-                    required
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
-              <Button type="submit" text="Generate" />
-            </form>
+            <div>
+              <form method="post" onSubmit={handleSubmit}>
+                <TextField
+                  type="text"
+                  name="studentName"
+                  value={formData.studentName}
+                  onChange={handleChange}
+                  label="Student Name"
+                  required
+                />
+                <TextField
+                  type="text"
+                  name="studentWallet"
+                  value={formData.studentWallet}
+                  onChange={handleChange}
+                  label="Student e-Wallet Address"
+                  required
+                />
+                <TextField
+                  type="text"
+                  name="eventName"
+                  value={formData.eventName}
+                  onChange={handleChange}
+                  label="Event Name"
+                />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={["DateField", "DateField"]}>
+                    <DateField
+                      label="Date"
+                      value={date}
+                      onChange={(newValue) => setDate(newValue)}
+                      format="LL"
+                      required
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+                <Button type="submit" text="Generate" />
+              </form>
+            </div>
           </StyledDiv>
           <div>
             <Certificate

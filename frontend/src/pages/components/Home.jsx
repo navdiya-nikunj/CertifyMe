@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 
-import ContactForm from "./contactus";
+import ContactForm from "./ContactUs";
 import Footer from "./Footer";
 
 import Button from "../atoms/Button";
@@ -82,7 +82,7 @@ export default function Home() {
           <h2>How Does It Work?</h2>
           <p>
             Learn more about our platform's workflow and features in our{" "}
-            <Link to="/documentation">documentation</Link>.
+            <a href="https://github.com/navdiya-nikunj/CertifyMe/blob/main/Documentation.md" target="_blank">documentation</a>.
           </p>
         </HowItWorks>
         <div>

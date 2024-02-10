@@ -163,7 +163,11 @@ export default function StudentProfile({ student }) {
   
       ))}
       </StyledCards></StyledCardsDiv>):( 
-        <p>Sorry but you are not worthy of living.</p>
+        <>
+        {
+         isConnected && !loading && (<p>Sorry but you Don't Have any Certificates in your Profile.</p>)
+        }
+        </>
       )
       
       }

@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { StyledNavbar, StyledNavLink } from "../../styles/jsx/navbar.styles";
+import { NavLink, Outlet } from "react-router-dom";
 
 export default function Navbar({ user }) {
   return (
@@ -11,6 +12,7 @@ export default function Navbar({ user }) {
           <StyledNavLink to={`/profile/${user?._id}`}>Profile</StyledNavLink>
         </div>
       </StyledNavbar>
+
       <Outlet />
     </>
   );

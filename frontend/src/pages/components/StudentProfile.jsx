@@ -91,7 +91,6 @@ export default function StudentProfile({ student }) {
       console.error("Error fetching certificate data:", error);
     }
   };
-
   return (
     <>
       Profile page

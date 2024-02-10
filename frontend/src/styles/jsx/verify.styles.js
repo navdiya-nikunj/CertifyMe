@@ -7,7 +7,6 @@ const Container = styled.div`
   align-items: center;
   margin: 2rem 9rem;
   padding: 2rem;
-  box-shadow: ${(props) => props.theme.light.shadow};
 
   > h2 {
     color: ${({ theme }) => theme.light.secondary};

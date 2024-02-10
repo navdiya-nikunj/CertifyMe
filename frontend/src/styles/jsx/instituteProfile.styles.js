@@ -10,10 +10,8 @@ const StyledPage = styled.div`
   align-items: center;
   font-family: ${(props) => props.theme.fonts.fontFamily};
   color: ${(props) => props.theme.light.text};
-  box-shadow: ${(props) => props.theme.light.shadow};
 
   > h1 {
-    color: ${({ theme }) => theme.light.secondary};
     margin: 1rem;
   }
   h4 {

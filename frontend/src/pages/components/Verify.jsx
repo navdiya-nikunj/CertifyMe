@@ -67,7 +67,7 @@ export default function VerifyCertificate() {
       setVerificationResult("Not Verified");
       if (!Web3.ethereum) {
         setVerificationResult("");
-        toast.error("You don't have any web3 wallet or web3 instance!!", {
+        toast.error("You don't have any web3 wallet or web3 instance!! Or you haven't added the certificateID", {
           position: "bottom-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -110,8 +110,8 @@ export default function VerifyCertificate() {
             placeholder="0x23d6E35159Cc6979667577d50F1148f30bb8E01d/{id}"
             required
           />
-        </div>
         <Btn text="Verify" type="button" onClick={handleVerification} />
+        </div>
         {verificationResult && <p>{verificationResult}</p>}
         {blockExplorerLink && (
           <a href={blockExplorerLink} target="_blank" rel="noreferrer">

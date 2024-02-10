@@ -6,8 +6,10 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
+
 import Button from "../atoms/Button";
 import axios from "../../axiosConfig";
+
 import { useNavigate } from "react-router-dom";
 
 export default function InstituteProfile({ institute }) {
@@ -37,14 +39,14 @@ export default function InstituteProfile({ institute }) {
   // }
 
   return (
-    <>
-      {institute.instituteName}'s Profile page
+    <StyledPage>
+      <h1>{institute.instituteName}'s Profile page</h1>
       {/* <Button type="button" text="click me" onClick={handleClick} /> */}
       <div>
         {templates.length && (
           <div>
-            <h4>Choose template to generate certificate</h4>
-            <FormControl fullWidth>
+            <h4>Please Choose a template to generate certificate</h4>
+            <FormControl>
               <InputLabel id="demo-simple-select-label">
                 Select Template
               </InputLabel>
@@ -67,20 +69,22 @@ export default function InstituteProfile({ institute }) {
           </div>
         )}
       </div>
-      <Button
-        type="button"
-        text="Generate certificate template"
-        onClick={() => navigate(`/profile/${institute._id}/template-form`)}
-      />
-      <Button
-        type="submit"
-        text="Generate certificate"
-        onClick={() =>
-          navigate(`/profile/${institute._id}/certificate-form`, {
-            state: templates[selectedTemplate],
-          })
-        }
-      />
+      <div>
+        <Button
+          type="button"
+          text="Generate certificate template"
+          onClick={() => navigate(`/profile/${institute._id}/template-form`)}
+        />
+        <Button
+          type="submit"
+          text="Generate certificate"
+          onClick={() =>
+            navigate(`/profile/${institute._id}/certificate-form`, {
+              state: templates[selectedTemplate],
+            })
+          }
+        />
+      </div>
       {/* {
         loading ?( <div>Loading...</div>):(
           walletaddress !== "" ? ( <div>Wallet address: {walletaddress}</div>)

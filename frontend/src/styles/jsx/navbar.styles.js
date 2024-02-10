@@ -22,6 +22,7 @@ const StyledMainNavbar = styled.nav`
 
 const StyledNavLink = styled(NavLink)`
   text-decoration: none;
+  cursor: pointer;
   padding: 1rem;
   color: ${(props) => props.theme.light.nav.text};
   transition: all 0.3s ease;
@@ -59,7 +60,7 @@ const StyledLogo = styled.img`
 `;
 
 const StyledNavbar = styled.nav`
-  padding-left: 1rem;
+  padding: 0.2rem 1rem;
   margin-top: 0.5rem;
   border-radius: 20px;
   font-size: 1.2rem;
@@ -68,7 +69,6 @@ const StyledNavbar = styled.nav`
   position: sticky;
   display: flex;
   justify-content: space-between;
-  padding: 0.2rem;
   background: linear-gradient(to right, #f5d9e4, #d6d0f7);
   backdrop-filter: blur(8px);
   z-index: 100;

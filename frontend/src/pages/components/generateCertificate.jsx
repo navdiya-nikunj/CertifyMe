@@ -104,6 +104,7 @@ export default function GenerateCertificate() {
     .catch(error => {
         alert('Oops... ' + error.message);
     });
+
             })
             .catch((error) => {
               setIsLoading(false);
@@ -225,9 +226,11 @@ export default function GenerateCertificate() {
         <>
           <StyledDiv>
             <div>
+
               <form method="post" onSubmit={handleSubmit}>
                 <TextField
                 sx={textfieldTheme}
+
                   type="text"
                   name="studentName"
                   value={formData.studentName}
@@ -236,7 +239,9 @@ export default function GenerateCertificate() {
                   required
                 />
                 <TextField
+
                 sx={textfieldTheme}
+
                   type="text"
                   name="studentWallet"
                   value={formData.studentWallet}
@@ -246,6 +251,7 @@ export default function GenerateCertificate() {
                 />
                 <TextField
                 sx={textfieldTheme}
+
                   type="text"
                   name="eventName"
                   value={formData.eventName}
@@ -264,10 +270,12 @@ export default function GenerateCertificate() {
                   </DemoContainer>
                 </LocalizationProvider>
                 <Button type="submit" text="Generate" />
+
               </form>
             </div>
           </StyledDiv>
           <div>
+            <h3 style={{ margin: "1rem" }}>Certificate Image Preview</h3>
             <Certificate
               instituteName={instituteName}
               title={title}

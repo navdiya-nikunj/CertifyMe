@@ -26,6 +26,7 @@ const StyledDiv = styled.div`
       flex-direction: column;
       justify-content: space-between;
       min-height: 80vh;
+
     }
   }
 `;

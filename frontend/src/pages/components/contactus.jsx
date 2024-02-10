@@ -1,19 +1,18 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import Button from "../atoms/Button";
+import React, { useState } from 'react';
+import styled from 'styled-components';
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
+    name: '',
+    email: '',
+    message: ''
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
+    setFormData(prevState => ({
       ...prevState,
-      [name]: value,
+      [name]: value
     }));
   };
 
@@ -23,9 +22,9 @@ const ContactForm = () => {
     console.log(formData);
     // Clear form fields after submission
     setFormData({
-      name: "",
-      email: "",
-      message: "",
+      name: '',
+      email: '',
+      message: ''
     });
   };
 
@@ -55,9 +54,7 @@ const ContactForm = () => {
           onChange={handleChange}
           required
         />
-        <div>
-          <Button type="submit" text="Submit" />
-        </div>
+        <Button type="submit">Submit</Button>
       </form>
     </FormContainer>
   );
@@ -83,6 +80,15 @@ const Textarea = styled.textarea`
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+`;
+
+const Button = styled.button`
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 `;
 
 export default ContactForm;

@@ -33,8 +33,7 @@ class AuthService {
     const { user } = await userService.findEmail(email, isInstitute);
 
     if (user) {
-      const isValidPassword = bcrypt.compare(password, user.password);
-
+      const isValidPassword = await bcrypt.compare(password, user.password);
       if (!isValidPassword) return { isLoggedIn: false };
 
       const token = this.generateToken(user._id, user.instituteName);

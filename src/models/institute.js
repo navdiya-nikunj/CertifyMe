@@ -22,9 +22,14 @@ const instituteSchema = new mongoose.Schema({
     trim: true,
     validate: (value) => validator.isStrongPassword(value),
   },
-  //   walletAddress: {
-  //     type:
-  //   },
+  walletAddress: {
+    type: String,
+    // unique: true,
+  },
+  templateIds: {
+    type: [mongoose.SchemaTypes.ObjectId],
+    ref: "Template",
+  },
 });
 
 const Institute = mongoose.model("Institute", instituteSchema);

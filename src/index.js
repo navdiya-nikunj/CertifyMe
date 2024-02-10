@@ -12,7 +12,10 @@ app.use("/auth", authRouter);
 
 app.get(
   "/user",
-  passport.authenticate("jwt", { session: false, failureRedirect: "/" }),
+  passport.authenticate("jwt", {
+    session: false,
+    failureRedirect: "/",
+  }),
   (req, res) => {
     res.send(req.user);
   }

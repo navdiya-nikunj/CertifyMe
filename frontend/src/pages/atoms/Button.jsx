@@ -1,15 +1,16 @@
 import React from "react";
+import StyledButton from "../../styles/jsx/button.styles";
 
 export default function Button(props) {
   const { type, text, onClick } = props;
   return (
     <>
       {onClick ? (
-        <button type={type} onClick={onClick}>
+        <StyledButton type={type} onClick={onClick}>
           {text}
-        </button>
+        </StyledButton>
       ) : (
-        <button type={type}>{text}</button>
+        <StyledButton type={type}>{text}</StyledButton>
       )}
     </>
   );

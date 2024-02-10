@@ -1,57 +1,104 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+
 import Button from "../atoms/Button";
 import axios from "../../axiosConfig";
-// import GenerateCerti from "./generateCertificate";
-import GerenrateCertiTemplate from "./generateCertiTemplate";
-import GenerateCertificate from "./generateCertificate";
+import { useNavigate } from "react-router-dom";
+import { connect, set } from "mongoose";
+
 
 export default function InstituteProfile({ institute }) {
-  const [certificateTemplates, setCertificateTemplates] = useState([]);
-  const [
-    showgenteratecirtificatetemplate,
-    setShowgenteratecirtificatetemplate,
-  ] = useState(false);
+  const templates = useSelector((state) => state.template.templates);
+  const [walletaddress, setWalletaddress] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const getCertificateTemplates = async () => {
-    // await axios
-    //  .get("/certificateTemplates", { withCredentials: true })
-    //  .then((res) => {
-    //     setCertificateTemplates(res.data);
-    //   })
-    //  .catch((error) => console.log(error));
+
+  const [selectedTemplate, setSelectedTemplate] = useState(0);
+  const navigate = useNavigate();
+
+  const handleChange = (event) => {
+    setSelectedTemplate(event.target.value);
   };
+  // async function handleClick(e) {
+  //   await axios
+  //     .get("/profile", { withCredentials: true })
+  //     .then()
+  //     .catch((error) => console.log(error));
+  // }
 
-  async function handleClick(e) {
-    await axios
-      .get("/profile", { withCredentials: true })
-      .then()
-      .catch((error) => console.log(error));
-  }
+  // const connectWallet = async () => {
+  //   setLoading(true);
+  //    // Check if Web3 is injected by the browser
+  //    await window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts)=>{
+  //      setWalletaddress(accounts[0]);
+  //      setLoading(false);
+  //    });
+  //   //  console.log(web3);
+  // }
+
+
+
   return (
-    <div>
+    <>
       {institute.instituteName}'s Profile page
-      <Button type="button" text="click me" onClick={handleClick} />
+      {/* <Button type="button" text="click me" onClick={handleClick} /> */}
       <div>
-        <p>Available templets</p>
-        {certificateTemplates.length !== 0 &&
-          certificateTemplates.map((template) => (
-            <div>
-              <p>Certificate Name: {template.certificateName}</p>
-              <p>Certificate Description: {template.certificateDesc}</p>
-              <Button
-                type="button"
-                text="Generate certificate"
-                onClick={() => <GenerateCertificate certificate={template} />}
-              />
-            </div>
-          ))}
+        {templates.length && (
+          <div>
+            <h4>Choose template to generate certificate</h4>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">
+                Select Template
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={selectedTemplate}
+                label="Select Template"
+                onChange={handleChange}
+              >
+                {templates.map((template, index) => {
+                  return (
+                    <MenuItem key={template._id} value={index}>
+                      {template.title}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </div>
+        )}
       </div>
       <Button
         type="button"
-        text="Generate certificate templet"
-        onClick={() => setShowgenteratecirtificatetemplate(true)}
+        text="Generate certificate template"
+        onClick={() => navigate(`/profile/${institute._id}/template-form`)}
       />
-      {showgenteratecirtificatetemplate && <GerenrateCertiTemplate />}
-    </div>
+      <Button
+        type="submit"
+        text="Generate certificate"
+        onClick={() =>
+          navigate(`/profile/${institute._id}/certificate-form`, {
+            state: templates[selectedTemplate],
+          })
+        }
+      />
+      {/* {
+        loading ?( <div>Loading...</div>):(
+          walletaddress !== "" ? ( <div>Wallet address: {walletaddress}</div>)
+            : (<Button
+              type="button"
+              text="Connect Wallet"
+              onClick={connectWallet}
+              />)
+        )
+      } */}
+      
+    </>
   );
 }

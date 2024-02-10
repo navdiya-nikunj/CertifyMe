@@ -80,7 +80,7 @@ export default function StudentProfile({ student }) {
             });
           });
         setLoading(false);
-      }else{
+      } else {
         toast.error("Please install metamask", {
           position: "bottom-center",
           autoClose: 5000,
@@ -170,13 +170,15 @@ export default function StudentProfile({ student }) {
       ) : (
         <StyledPage>
           {/* <img src={walletImage}/> */}
-          <h1>Connect your wallet to see your certificates </h1>
           <div>
-            <Button
-              type="button"
-              text="Connect Wallet"
-              onClick={connectwallet}
-            />
+            <h1>Connect your wallet to see your certificates </h1>
+            <div>
+              <Button
+                type="button"
+                text="Connect Wallet"
+                onClick={connectwallet}
+              />
+            </div>
           </div>
         </StyledPage>
       )}

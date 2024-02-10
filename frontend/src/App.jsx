@@ -5,6 +5,7 @@ import axios from "./axiosConfig";
 
 import { saved as studentSaved } from "./state/studentSlice";
 import { saved as instituteSaved } from "./state/instituteSlice";
+import { restored as templateRestored } from "./state/templateSlice";
 
 import Navbar from "./pages/components/Navbar";
 import Home from "./pages/components/Home";
@@ -27,6 +28,9 @@ function App() {
       .then((res) => res.data)
       .then((user) => {
         if (user.instituteName) {
+          console.log("initial template", user.templateIds);
+          dispatch(templateRestored(user.templateIds));
+          delete user.templateIds;
           dispatch(instituteSaved(user));
         } else {
           dispatch(studentSaved(user));
@@ -38,13 +42,16 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navbar />}>
+        <Route
+          path="/"
+          element={<Navbar user={studentUser || instituteUser} />}
+        >
           <Route index element={<Home />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="login" element={<Login />} />
         </Route>
         <Route
-          path={`/profile/:id`}
+          path={"/profile/:id"}
           element={
             <ProtectedRoute user={studentUser || instituteUser}>
               {studentUser ? (

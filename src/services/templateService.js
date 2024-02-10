@@ -2,8 +2,8 @@ const Template = require("../models/template");
 
 class TemplateService {
   createTemplate = async (data) => {
-    const template = new Template(data);
     try {
+      const template = new Template(data);
       const savedTemplate = await template.save();
       console.log(savedTemplate);
       return { savedTemplate };

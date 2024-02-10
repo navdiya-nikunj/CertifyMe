@@ -17,10 +17,10 @@ const studentSchema = new mongoose.Schema({
   },
   walletAddress: {
     type: String,
-    unique: true,
+    // unique: true,
   },
   // certificates: {
-  //   type: [mongoose.SchemaTypes.ObjectId],
+  //   type: [],
   //   ref: "Certificate",
   // },
 });

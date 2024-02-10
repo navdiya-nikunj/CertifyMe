@@ -1,4 +1,8 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+
+import { saved as templateSaved } from "../../state/templateSlice";
+
 import TextField from "@mui/material/TextField";
 import Button from "../atoms/Button";
 import axios from "../../axiosConfig";
@@ -14,17 +18,7 @@ export default function GerenrateTemplate() {
     designation: "",
   });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setFormData({ ...formData, signature });
-
-    await axios
-      .post("/profile/template/new", formData, { withCredentials: true })
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((error) => console.log(error));
-  };
+  const dispatch = useDispatch();
 
   function handleChange(e) {
     const value = e?.target?.value;
@@ -34,6 +28,7 @@ export default function GerenrateTemplate() {
       [e?.target?.name]: value,
     });
   }
+
   function handleSignatureChange(e) {
     const value = e?.target?.value;
 
@@ -42,6 +37,19 @@ export default function GerenrateTemplate() {
       [e?.target?.name]: value,
     });
   }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormData({ ...formData, signature });
+
+    await axios
+      .post("/profile/template/new", formData, { withCredentials: true })
+      .then((res) => {
+        console.log(res.data);
+        dispatch(templateSaved(res.data));
+      })
+      .catch((error) => console.log(error));
+  };
 
   return (
     <div>
@@ -96,9 +104,6 @@ export default function GerenrateTemplate() {
         />
         <Button type="submit" text="Submit" />
       </form>
-      <br />
-      <p>Certificate Name: Certificate of {formData.certificateName}</p>
-      <p>Certificate Description: {formData.certificateDesc}</p>
     </div>
   );
 }

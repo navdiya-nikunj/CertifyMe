@@ -34,7 +34,8 @@ class UserService {
   findById = async (userId, instituteName) => {
     let user = null;
     try {
-      if (instituteName) user = await Institute.findOne({ _id: userId });
+      if (instituteName)
+        user = await Institute.findOne({ _id: userId }).populate("templateIds");
       else user = await Student.findOne({ _id: userId });
       return user;
     } catch (error) {

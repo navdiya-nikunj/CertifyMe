@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  Container,
-  Certi,
-  FormDiv,
-  ButtonDiv,
-} from "../../styles/jsx/verify.styles";
+import { Container, Certi } from "../../styles/jsx/verify.styles";
 import CertiABI from "../../certificate.json";
 import Btn from "../atoms/Button";
 import TextField from "@mui/material/TextField";
@@ -72,20 +67,17 @@ export default function VerifyCertificate() {
       setVerificationResult("Not Verified");
       if (!Web3.ethereum) {
         setVerificationResult("");
-        toast.error(
-          "You don't have any web3 wallet or web3 instance!! Or you haven't added the certificateID",
-          {
-            position: "bottom-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Slide,
-          }
-        );
+        toast.error("You don't have any web3 wallet or web3 instance!! Or you haven't added the certificateID", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Slide,
+        });
       } else {
         toast.error("Not verified Certificate or ID.", {
           position: "bottom-center",
@@ -154,6 +146,7 @@ export default function VerifyCertificate() {
           </Container>
           <ToastContainer />
         </>
+
       )}
     </>
   );

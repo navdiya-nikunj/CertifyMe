@@ -106,6 +106,7 @@ export default function StudentProfile({ student }) {
         setLoading(false);
       } else {
         toast.error("Please install MetaMask", {
+
           position: "bottom-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -194,15 +195,13 @@ export default function StudentProfile({ student }) {
       ) : (
         <StyledPage>
           {/* <img src={walletImage}/> */}
+          <h1>Connect your wallet to see your certificates </h1>
           <div>
-            <h1>Connect your wallet to see your certificates </h1>
-            <div>
-              <Button
-                type="button"
-                text="Connect Wallet"
-                onClick={connectwallet}
-              />
-            </div>
+            <Button
+              type="button"
+              text="Connect Wallet"
+              onClick={connectwallet}
+            />
           </div>
         </StyledPage>
       )}

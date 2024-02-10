@@ -10,7 +10,6 @@ const StyledMainNavbar = styled.nav`
   justify-content: space-between;
   align-items: center;
   z-index: 100;
-  background-color: white;
   box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.5);
 `;
 
@@ -55,16 +54,15 @@ const StyledLogo = styled.img`
 `;
 
 const StyledNavbar = styled.nav`
-  font-size: 1.2rem;
-  height: 20%;
-  top: 0;
-  position: sticky;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: white;
-  z-index: 100;
-  box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.5);
+font-size: 1.2rem;
+height: 20%;
+top: 0;
+position: sticky;
+display: flex;
+justify-content: space-between;
+align-items: center;
+z-index: 100;
+box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.5);
 `;
 
 export { StyledMainNavbar, StyledNavbar, StyledNavLink, StyledLogo, NavButton };

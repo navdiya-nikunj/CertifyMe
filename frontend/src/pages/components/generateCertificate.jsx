@@ -58,6 +58,26 @@ export default function GenerateCertificate() {
     setFormData({ studentName: "", studentWallet: "", eventName: "", studentEmail: "" });
       return;
     }
+
+    const res = await window.ethereum.request({ method: 'eth_chainId' }).then((chainId) => {
+    if (chainId !== '80001' && chainId !== "0x13881") { // Mumbai network ID
+      toast.error("Please switch Metamask network to Mumbai", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return false;
+    }
+    return true;
+  });
+  if(!res){
+    return;
+  }
+
     setIsLoading(true);
     const imgData = await downloadPDF();
     await uploadimgToIPFS(imgData).then((res) => {
@@ -79,7 +99,7 @@ export default function GenerateCertificate() {
           const web3 = new Web3(window.ethereum);
           const contract = new web3.eth.Contract(CertiABI, contractAddress);
           contract.methods
-            .awardItem(formData.studentWallet, "https://ipfs.io/ipfs/" + hash)
+            .safeMint(formData.studentWallet, "https://ipfs.io/ipfs/" + hash)
             .send({ from: accounts[0] })
             .then((transaction, error) => {
               console.log(transaction);
@@ -112,7 +132,7 @@ export default function GenerateCertificate() {
                     formData.eventName,
                   date: date,
                   student_email: formData.studentEmail,
-                  certificateID: "0x23d6E35159Cc6979667577d50F1148f30bb8E01d/"+transaction.events.CertificateCreated.returnValues[1],
+                  certificateID: import.meta.env.VITE_CONTRACT_ADDRESS+"/"+transaction.events.Transfer.returnValues[2],
                 },
               };
 

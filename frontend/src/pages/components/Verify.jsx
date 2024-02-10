@@ -46,11 +46,11 @@ export default function VerifyCertificate() {
         setImage(res.data.image);
         setVerificationResult("Verified");
         setBlockExplorerLink(
-          "https://sepolia.etherscan.io/token/0x23d6e35159cc6979667577d50f1148f30bb8e01d?a=" +
+          "https://mumbai.polygonscan.com/token/0xba5AC4e693C5e4a4e76a34Bb78240b0DB7f85D93?a=" +
             parseInt(certificateId.split("/")[1])
         );
         setOpenSeaLink(
-          "https://testnets.opensea.io/assets/sepolia/0x23d6e35159cc6979667577d50f1148f30bb8e01d/" +
+          "https://testnets.opensea.io/assets/mumbai/0xba5AC4e693C5e4a4e76a34Bb78240b0DB7f85D93/" +
             parseInt(certificateId.split("/")[1])
         );
         toast.success("Verified Certificate.", {
@@ -138,7 +138,7 @@ export default function VerifyCertificate() {
             {verificationResult && <p>{verificationResult}</p>}
             {blockExplorerLink && (
               <a href={blockExplorerLink} target="_blank" rel="noreferrer">
-                View on Etherscan
+                View on BlockExplorer
               </a>
             )}
             {openseaLink && (

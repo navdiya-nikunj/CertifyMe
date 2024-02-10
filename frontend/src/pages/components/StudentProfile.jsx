@@ -16,7 +16,7 @@ import { toast, Slide, ToastContainer } from "react-toastify";
 import walletImage from "/wallet.svg";
 
 export default function StudentProfile({ student }) {
-  const contractAddress = "0x23d6E35159Cc6979667577d50F1148f30bb8E01d";
+  const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
   const [walletAddress, setWalletAddress] = useState("");
   const [isConnected, setIsConnected] = useState(false);
   const [certificateIDs, setCertificateIDs] = useState([]);
@@ -48,12 +48,36 @@ export default function StudentProfile({ student }) {
     try {
       setLoading(true);
       if (window.ethereum) {
+        const res = await window.ethereum.request({ method: "eth_chainId" }).then((chainId) => {
+        console.log(chainId);
+        if (chainId !== '80001' && chainId !== "0x13881") {
+          toast.error("Please switch MetaMask network to Polygon", {
+            position: "bottom-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Slide,
+          });
+          setLoading(false);
+          return false;
+        }else {
+          return true;
+        }
+      });
+        console.log("res",res);
+        if(!res){
+          return;
+        }
         await window.ethereum
           .request({ method: "eth_requestAccounts" })
           .then((accounts) => {
             setWalletAddress(accounts[0]);
             setIsConnected(true);
-            toast.success("Wallet Connected Sucessfully", {
+            toast.success("Wallet Connected Successfully", {
               position: "bottom-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -81,7 +105,7 @@ export default function StudentProfile({ student }) {
           });
         setLoading(false);
       } else {
-        toast.error("Please install metamask", {
+        toast.error("Please install MetaMask", {
           position: "bottom-center",
           autoClose: 5000,
           hideProgressBar: false,

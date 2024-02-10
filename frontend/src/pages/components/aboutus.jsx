@@ -25,11 +25,12 @@ const AboutUsPage = () => {
       <Paragraph>
         Welcome to our Blockchain Certification Platform! We are committed to revolutionizing the certification process
         by leveraging blockchain technology to provide secure, transparent, and immutable certificates. Our platform
-        allows educational institutes to generate certificates as Non-Fungible Tokens (NFTs) on the Polygon blockchain.
+        allows educational institutes to generate certificates as Non-Fungible Tokens (NFTs) on the Ethereum blockchain.
         With Pinata IPFS integration, certificate images and metadata are stored securely and decentralized. Students can
         manage their certificates using MetaMask wallet integration, ensuring ownership and portability. Our goal is to
         make certification verification efficient and trustworthy for both institutes and employers.
       </Paragraph>
+      <br/>
       <Paragraph>
         At our core, we believe in empowering individuals and institutions through innovative technology solutions. By
         embracing blockchain and decentralization, we aim to create a future where certifications are not only

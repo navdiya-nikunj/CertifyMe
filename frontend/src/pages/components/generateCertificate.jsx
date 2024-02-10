@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import { StyledDiv } from "../../styles/jsx/generate-certificate.styles";
+import textfieldTheme from "../../styles/jsx/textfield.styles";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -78,6 +79,37 @@ export default function GenerateCertificate() {
                 theme: "colored",
                 transition: Slide,
               });
+              var data = {
+                service_id: "service_091mv0p",
+                template_id: "template_63hkzbf",
+                user_id: "szL2tKmkdmm1fZJ5W",
+                template_params: {
+                  to_name: formData.studentName,
+                  eventName: formData.eventName,
+                  instituteName: instituteName,
+                  certificateDesc:
+                    formData.studentName +
+                    " " +
+                    description +
+                    formData.eventName,
+                  date: date,
+                  student_email: "vorakhushi66@gmail.com",
+                  certificateID: "0x23d6E35159Cc6979667577d50F1148f30bb8E01d/",
+                },
+              };
+
+              axios
+                .post("https://api.emailjs.com/api/v1.0/email/send", data, {
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                })
+                .then((response) => {
+                  alert("Your mail is sent!");
+                })
+                .catch((error) => {
+                  alert("Oops... " + error.message);
+                });
             })
             .catch((error) => {
               setIsLoading(false);
@@ -198,45 +230,54 @@ export default function GenerateCertificate() {
       ) : (
         <>
           <StyledDiv>
-            <form method="post" onSubmit={handleSubmit}>
-              <TextField
-                type="text"
-                name="studentName"
-                value={formData.studentName}
-                onChange={handleChange}
-                label="Student Name"
-                required
-              />
-              <TextField
-                type="text"
-                name="studentWallet"
-                value={formData.studentWallet}
-                onChange={handleChange}
-                label="Student e-Wallet Address"
-                required
-              />
-              <TextField
-                type="text"
-                name="eventName"
-                value={formData.eventName}
-                onChange={handleChange}
-                label="Event Name"
-              />
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DateField", "DateField"]}>
-                  <DateField
-                    label="Date"
-                    value={date}
-                    onChange={(newValue) => setDate(newValue)}
-                    format="LL"
-                    required
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
-              <Button type="submit" text="Generate" />
-            </form>
+            <div>
+              <h2>Generate Certificate</h2>
+              <form method="post" onSubmit={handleSubmit}>
+                <TextField
+                  sx={textfieldTheme}
+                  type="text"
+                  name="studentName"
+                  value={formData.studentName}
+                  onChange={handleChange}
+                  label="Student Name"
+                  required
+                />
+                <TextField
+                  sx={textfieldTheme}
+                  type="text"
+                  name="studentWallet"
+                  value={formData.studentWallet}
+                  onChange={handleChange}
+                  label="Student e-Wallet Address"
+                  required
+                />
+                <TextField
+                  sx={textfieldTheme}
+                  type="text"
+                  name="eventName"
+                  value={formData.eventName}
+                  onChange={handleChange}
+                  label="Event Name"
+                />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={["DateField", "DateField"]}>
+                    <DateField
+                      label="Date"
+                      value={date}
+                      onChange={(newValue) => setDate(newValue)}
+                      format="LL"
+                      required
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+                <div>
+                  <Button type="submit" text="Generate Certificate" />
+                </div>
+              </form>
+            </div>
           </StyledDiv>
           <div>
+            <h3 style={{ margin: "1rem" }}>Certificate Image Preview</h3>
             <Certificate
               instituteName={instituteName}
               title={title}

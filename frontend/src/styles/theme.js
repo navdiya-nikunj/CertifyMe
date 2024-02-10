@@ -10,14 +10,16 @@ const theme = {
       text: "#014B7A",
     },
     backgroundGradient: {
-      color1: "#f7eaa3",
+      // color1: "#f7eaa3",
+      color1: "#f7eaa38f",
       color2: "#ecb4ee8f",
-      color3: "#a3cbf7",
+      color3: "#a3ccf78f",
     },
     bgColor: "#a3caf6",
 
     primary: "#F5F5F5",
     secondary: "#017ECB",
+    shadow: "0 4px 30px rgba(0, 0, 0, 0.4)",
     text: "#000",
     secondaryText: "#fff",
     // primaryText: "#212d40",

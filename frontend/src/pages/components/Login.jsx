@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { saved as studentSaved } from "../../state/studentSlice";
 import { saved as instituteSaved } from "../../state/instituteSlice";
+import { restored as templateRestored } from "../../state/templateSlice";
 
 import Button from "../atoms/Button";
 import axios from "../../axiosConfig";
@@ -73,16 +74,19 @@ export default function Login() {
     console.log(formData);
     await axios
       .post("/auth/login", formData, { withCredentials: true })
-      .then((res) => {
-        console.log("res.data", res.data);
+      .then((res) => res.data)
+      .then((user) => {
+        console.log("user", user);
 
-        if (res.data.instituteName) {
-          dispatch(instituteSaved(res.data));
+        if (user.instituteName) {
+          dispatch(templateRestored(user.templateIds));
+          delete user.templateIds;
+          dispatch(instituteSaved(user));
         } else {
-          dispatch(studentSaved(res.data));
+          dispatch(studentSaved(user));
         }
 
-        navigate(`/profile/${res.data._id}`);
+        navigate(`/profile/${user._id}`);
       })
       .catch((e) => {
         console.log(e.response.data);

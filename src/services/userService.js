@@ -36,7 +36,6 @@ class UserService {
     try {
       if (instituteName) user = await Institute.findOne({ _id: userId });
       else user = await Student.findOne({ _id: userId });
-      console.log(user);
       return user;
     } catch (error) {
       throw error;

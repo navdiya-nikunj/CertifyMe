@@ -1,6 +1,6 @@
 const theme = {
   fonts: {
-    fontFamily: "Roboto",
+    fontFamily: "Poppins, sans-serif",
     fontSize: "1rem",
   },
   light: {
@@ -22,6 +22,7 @@ const theme = {
     shadow: "0 4px 30px rgba(0, 0, 0, 0.4)",
     text: "#000",
     secondaryText: "#fff",
+    button: "#2093E0"
     // primaryText: "#212d40",
   },
 };

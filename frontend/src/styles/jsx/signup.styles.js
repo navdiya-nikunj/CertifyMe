@@ -1,30 +1,12 @@
 import styled from "styled-components";
 
 const StyledDiv = styled.div`
-  margin: 2rem 9rem;
-  height: 80vh;
+  margin: 0 30% 0 30%;
+  height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  background-color: ${(props) => props.theme.light.primary};
-  box-shadow: ${(props) => props.theme.light.shadow};
+  flex-direction: column;
 
-  > div {
-    padding: 2rem;
-    width: 100%;
-    height: 100%;
-    background-image: radial-gradient(
-      circle 369px at -2.9% 12.9%,
-      ${({ theme }) => theme.light.backgroundGradient.color1} 0%,
-      ${({ theme }) => theme.light.backgroundGradient.color2} 46.4%,
-      ${({ theme }) => theme.light.backgroundGradient.color3} 100.7%
-    );
-  }
-
-  > div > img {
-    height: 100%;
-    width: 100%;
-  }
 
   > form {
     padding: 2rem;
@@ -39,7 +21,13 @@ const StyledDiv = styled.div`
 
   > form > h1 {
     margin: 1rem;
-    color: ${(props) => props.theme.light.secondary};
+    font-size: 2rem;
+  }
+
+  > form > h4 {
+    margin-bottom: 1rem;
+    text-align: left;
+    font-size: 1rem;
   }
 `;
 

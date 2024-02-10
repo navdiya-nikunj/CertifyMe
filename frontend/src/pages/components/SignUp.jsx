@@ -97,11 +97,9 @@ export default function SignUp() {
 
   return (
     <StyledDiv>
-      <div>
-        <img src={signupImage} alt="login" />
-      </div>
       <form onSubmit={handleSubmit}>
-        <h1>Sign Up</h1>
+      <h1>Create an Account</h1>
+      <h4 style={{textAlign:"center"}}>Welcome to CertifyMe. Join us to empower education with secure and verifiable blockchain-based certification </h4>
         <TextField
           sx={textfieldTheme}
           name="email"
@@ -139,9 +137,10 @@ export default function SignUp() {
             required
           />
         </FormControl>
+        <h4>Password must contain at least 8 Characters, 1 lowercase, 1 uppercase, 1 Number, 1 Special Character </h4>
         <FormGroup sx={{ width: "100%" }}>
           <FormControlLabel
-            sx={{ m: 1, width: "100%" }}
+            sx={{ width: "100%" }}
             name="isInstitute"
             checked={checked}
             onChange={handleChecked}

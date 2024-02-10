@@ -1,13 +1,10 @@
 import styled from "styled-components";
 
 const StyledButton = styled.button`
-  background: linear-gradient(
-    to bottom,
-    ${({ theme }) => theme.light.secondary},
-    ${({ theme }) => theme.light.nav.text}
-  );
+  background-color: ${(props) => props.theme.light.button};
   border-radius: 10px;
   color: ${(props) => props.theme.light.secondaryText};
+  width: 100%;
   font-size: 1rem;
   padding: 0.5rem;
   margin: 1rem;

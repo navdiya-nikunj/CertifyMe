@@ -11,18 +11,29 @@ const Section = styled.section`
     background-color: ${props => props.theme.light.primary};
     display: flex;
     justify-content: center;
+    height: 100vh;
 
-    > div{
-        width:50%;
+    >div {
+        width: 50%;
+    }
+    >div > img {
+        padding: 5rem;
+        height: 100%;
+        width: 100%;
     }
 `;
 
 const ShortInfo = styled.div`
-    text-align: center;\
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 1.5rem;
     
     > h1 {
         text-shadow: 3px 3px 2px rgba(0, 0, 0, 0.3);
         font-weight: bold;
+        font-size: 3rem;
     }
 
 `;

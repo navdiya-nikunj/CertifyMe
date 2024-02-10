@@ -11,7 +11,7 @@ const theme = {
     // primaryText: "#e4e4e4",
   },
   light: {
-    primary: "#e4e4e4",
+    primary: "#fff",
     secondary: "#212D40",
     text: "#000",
     secondaryText: "#fff",

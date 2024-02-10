@@ -11,8 +11,7 @@ import textfieldTheme from "../../styles/jsx/textfield.styles";
 
 import TextField from "@mui/material/TextField";
 
-import { Application } from '@splinetool/runtime';
-
+import loginImage from "/login.svg";
 
 
 import { FormControl } from "@mui/material";
@@ -107,7 +106,7 @@ export default function Login() {
   return (
     <StyledDiv>
       <div>
-      <canvas id="canvas"/>
+      <img src={loginImage} alt="login" />
       </div>
       <form onSubmit={handleSubmit}>
         <h1>Login page</h1>

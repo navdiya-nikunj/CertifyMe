@@ -5,10 +5,11 @@ import Web3 from "web3";
 import certiABI from "../../certificate.json";
 import CertificateCard from "./CertificateCard";
 
-import {StyledPage, StyledCards} from "../../styles/jsx/studentProfile.styles";
+import {StyledPage, StyledCards,StyledCardsDiv} from "../../styles/jsx/studentProfile.styles";
 
 import LinearProgress from '@mui/material/LinearProgress';
 import { toast, Slide, ToastContainer } from "react-toastify";
+import walletImage from "/wallet.svg";
 
 
 
@@ -25,7 +26,7 @@ export default function StudentProfile({ student }) {
 
   useEffect(() => {
     fetchData();
-    console.log(certificatesData.length);
+    console.log(certificatesData);
   }, [certificateIDs]);
 
   const showCertificates = async () => {
@@ -107,7 +108,15 @@ export default function StudentProfile({ student }) {
       );
 
       const certificatesDataArray = await Promise.all(certificateDataPromises);
-      setCertificatesData(certificatesDataArray);
+      // console.log("certificare array",certificatesDataArray);
+      let i =0;
+      const finalData = certificatesDataArray.map((certificate)=>{
+        certificate.id = certificateIDs[i];
+        i++;
+        return certificate;
+      })
+      // console.log("certificare",finalData);
+      setCertificatesData(finalData);
       setLoading(false);
     } catch (error) {
       toast.error("Error fetching certificate data", {
@@ -136,27 +145,29 @@ export default function StudentProfile({ student }) {
           loading ? (
             <LinearProgress />
           ) :(<StyledPage>
+            <img src={walletImage}/>
             <h1>Connect your wallet to see your certificates </h1>
             <Button type="button" text="connect wallet" onClick={connectwallet} />
           </StyledPage>)
       )}
       {
       
-      isConnected && (<StyledCards> {certificatesData.map((certificate) => (
+      (isConnected && !loading && certificatesData.length !== 0) ? (<StyledCardsDiv><hr/> <h1>Your Certificates</h1> <hr/> <br/> <StyledCards> {certificatesData.map((certificate) => (
         <CertificateCard
           key={certificate.image} // Make sure to provide a unique key for each component
+          id={certificate.id}
           image={certificate.image}
           name={certificate.name}
           description={certificate.description}
         />
   
       ))}
-      </StyledCards> )
+      </StyledCards></StyledCardsDiv>):( 
+        <p>Sorry but you are not worthy of living.</p>
+      )
       
       }
-      {isConnected && !certificatesData.length && !loading && 
-        <p>Sorry but you are not worthy of living.</p>
-      }
+      
       <ToastContainer />
     </>
   );

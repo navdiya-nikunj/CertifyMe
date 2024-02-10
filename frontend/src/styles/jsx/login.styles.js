@@ -1,27 +1,36 @@
 import styled from "styled-components";
 
 const StyledDiv = styled.div`
-  margin: 2rem;
+margin: 2rem;
   height: 70vh;
-  padding: 1rem;
-  border-radius: 1rem;
-  box-shadow: 0px 0px 2px 4px #606060;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   background-color: ${(props) => props.theme.light.primary};
-  
-  > div {
-    height: 50%;
-    width: 50%;
+  box-shadow: 0px 0px 15px 10px #d6d0f7;
+
+
+  > div{
+    padding: 2rem;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient( circle 369px at -2.9% 12.9%,  rgba(247,234,163,1) 0%, rgba(236,180,238,0.56) 46.4%, rgba(163,203,247,1) 100.7% );
+  }
+
+  > div > img {
+    height: 100%;
+    width: 100%;
   }
 
   > form {
+    padding: 2rem;
     display: flex;
-    margin: 1rem;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    
+    height: 100%;
+    width: 100%;
   }
 
   > form > h1 {

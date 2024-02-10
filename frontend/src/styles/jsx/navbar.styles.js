@@ -10,9 +10,10 @@ const StyledMainNavbar = styled.nav`
   display: flex;
   justify-content: space-between;
   padding: 0.2rem;
-  background-color: #8C7AA9;
-  backdrop-filter: blur(8px);
+  background-color: #a3caf6;
+  background: linear-gradient(to right, #f5d9e4, #d6d0f7);
   z-index: 100;
+  
 `;
 
 const StyledNavLink = styled(NavLink)`
@@ -35,7 +36,9 @@ const StyledLogo = styled.img`
   width: 7rem;
 `
 
+
 const StyledNavbar = styled.nav`
+padding-left: 1rem;
 margin-top: 0.5rem;
   border-radius: 20px;
   font-size: 1.2rem;
@@ -45,9 +48,10 @@ margin-top: 0.5rem;
   display: flex;
   justify-content: space-between;
   padding: 0.2rem;
-  background-color: #8C7AA9;
+  background: linear-gradient(to right, #f5d9e4, #d6d0f7);
   backdrop-filter: blur(8px);
   z-index: 100;
+  color: white;
 `
 
 export { StyledMainNavbar,StyledNavbar, StyledNavLink,StyledLogo };

@@ -21,7 +21,8 @@ class UserService {
   findEmail = async (email, isInstitute) => {
     let user = null;
     try {
-      if (isInstitute) user = await Institute.findOne({ email });
+      if (isInstitute)
+        user = await Institute.findOne({ email }).populate("templateIds");
       else user = await Student.findOne({ email });
 
       return { user };

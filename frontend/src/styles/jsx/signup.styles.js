@@ -7,7 +7,7 @@ const StyledDiv = styled.div`
   align-items: center;
   justify-content: space-around;
   background-color: ${(props) => props.theme.light.primary};
-  box-shadow: 0px 0px 20px 3px ${({ theme }) => theme.light.secondary};
+  box-shadow: ${(props) => props.theme.light.shadow};
 
   > div {
     padding: 2rem;
@@ -39,7 +39,7 @@ const StyledDiv = styled.div`
 
   > form > h1 {
     margin: 1rem;
-    color: ${(props)=>props.theme.light.secondary}
+    color: ${(props) => props.theme.light.secondary};
   }
 `;
 

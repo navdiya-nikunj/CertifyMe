@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import { StyledDiv } from "../../styles/jsx/generate-certificate.styles";
+import textfieldTheme from "../../styles/jsx/textfield.styles";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -10,8 +11,7 @@ import { DateField } from "@mui/x-date-pickers/DateField";
 import Certificate, { downloadPDF } from "./Certificate";
 import Button from "../atoms/Button";
 import axios from "axios";
-const JWT =
-  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI5MjcwZTY3Ni1iZGVkLTRlN2EtYjgzMy04MmMwMTE1MDAyODciLCJlbWFpbCI6ImtyaXBuaWNrM0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJpZCI6IkZSQTEiLCJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MX0seyJpZCI6Ik5ZQzEiLCJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MX1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlLCJzdGF0dXMiOiJBQ1RJVkUifSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiZDlmODU2NDBjODI3MDc0ZTE3MDkiLCJzY29wZWRLZXlTZWNyZXQiOiI1YWM2ODkxYTI2MzhmZTNjZWY1ZGRlZDMwYzVlZDRiYmU0YzE4YjYxYTM5NDNkMmNhYWM2YjEzMzY0ZGQ5NDY3IiwiaWF0IjoxNzA2ODkxMjg3fQ.4mlbR8uKFxcsdtZFcqqCvt8arpg7UR5XDVDAeYQCw7E";
+const JWT = import.meta.env.VITE_IPFS_JWT;
 import Web3 from "web3";
 import CertiABI from "../../certificate.json";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -54,7 +54,7 @@ export default function GenerateCertificate() {
   };
 
   const contractCall = async (hash) => {
-    const contractAddress = "0x23d6E35159Cc6979667577d50F1148f30bb8E01d";
+    const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
     try {
       await window.ethereum
         .request({ method: "eth_requestAccounts" })
@@ -78,6 +78,32 @@ export default function GenerateCertificate() {
                 theme: "colored",
                 transition: Slide,
               });
+              var data = {
+                service_id: import.meta.env.VITE_SERVICE_ID,
+                template_id: import.meta.env.VITE_TEMPLATE_ID,
+                user_id: import.meta.env.VITE_USER_ID,
+                template_params: {
+                  'to_name': formData.studentName,
+                  'eventName': formData.eventName,
+                  'instituteName': instituteName,
+                  'certificateDesc': formData.studentName +" "+ description + formData.eventName,
+                  'date': date,
+                  'student_email': "vorakhushi66@gmail.com",
+                  'certificateID': "0x23d6E35159Cc6979667577d50F1148f30bb8E01d/"
+                }
+            };
+             
+            axios.post('https://api.emailjs.com/api/v1.0/email/send', data, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        alert('Your mail is sent!');
+    })
+    .catch(error => {
+        alert('Oops... ' + error.message);
+    });
             })
             .catch((error) => {
               setIsLoading(false);
@@ -201,6 +227,7 @@ export default function GenerateCertificate() {
             <div>
               <form method="post" onSubmit={handleSubmit}>
                 <TextField
+                sx={textfieldTheme}
                   type="text"
                   name="studentName"
                   value={formData.studentName}
@@ -209,6 +236,7 @@ export default function GenerateCertificate() {
                   required
                 />
                 <TextField
+                sx={textfieldTheme}
                   type="text"
                   name="studentWallet"
                   value={formData.studentWallet}
@@ -217,6 +245,7 @@ export default function GenerateCertificate() {
                   required
                 />
                 <TextField
+                sx={textfieldTheme}
                   type="text"
                   name="eventName"
                   value={formData.eventName}

@@ -4,7 +4,9 @@ import { useDispatch } from "react-redux";
 import { saved as templateSaved } from "../../state/templateSlice";
 
 import TextField from "@mui/material/TextField";
+
 import Button from "../atoms/Button";
+import textfieldTheme from "../../styles/jsx/textfield.styles";
 import { StyledDiv } from "../../styles/jsx/generate-template.styles";
 import axios from "../../axiosConfig";
 
@@ -56,54 +58,62 @@ export default function GerenrateTemplate() {
     <StyledDiv>
       {/* <Navbar/> */}
       <div>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          type="text"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          label="Certificate Tilte"
-          placeholder="Ex. Certificate Of Achievement"
-          required
-        />
-        <TextField
-          type="text"
-          name="phrase"
-          value={formData.phrase}
-          onChange={handleChange}
-          label="Certificate Phrase"
-          placeholder="Ex. This certificate is proudly awarded to"
-          required
-        />
-        <TextField
-          id="outlined-textarea"
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          label="Certificate Description"
-          placeholder="Ex. as appreciation for his/her exceptional efforts and contributions. May this accomplishment inspire continued success in his/her future endeavors."
-          multiline
-          required
-        />
-        <TextField
-          type="text"
-          name="name"
-          value={signature.name}
-          onChange={handleSignatureChange}
-          label="Name of Authority"
-          required
-        />
-        <TextField
-          type="text"
-          name="designation"
-          value={signature.designation}
-          onChange={handleSignatureChange}
-          label="Designation of Authority"
-          placeholder="Ex. Principal"
-          required
-        />
-        <Button type="submit" text="Submit" />
-      </form>
+        <h2>Certificate Template</h2>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            sx={textfieldTheme}
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            label="Certificate Tilte"
+            placeholder="Ex. Certificate Of Achievement"
+            required
+          />
+          <TextField
+            sx={textfieldTheme}
+            type="text"
+            name="phrase"
+            value={formData.phrase}
+            onChange={handleChange}
+            label="Certificate Phrase"
+            placeholder="Ex. This certificate is proudly awarded to"
+            required
+          />
+          <TextField
+            sx={textfieldTheme}
+            id="outlined-textarea"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            label="Certificate Description"
+            placeholder="Ex. as appreciation for his/her exceptional efforts and contributions. May this accomplishment inspire continued success in his/her future endeavors."
+            multiline
+            required
+          />
+          <TextField
+            sx={textfieldTheme}
+            type="text"
+            name="name"
+            value={signature.name}
+            onChange={handleSignatureChange}
+            label="Name of Authority"
+            required
+          />
+          <TextField
+            sx={textfieldTheme}
+            type="text"
+            name="designation"
+            value={signature.designation}
+            onChange={handleSignatureChange}
+            label="Designation of Authority"
+            placeholder="Ex. Principal"
+            required
+          />
+          <div>
+            <Button type="submit" text="Submit" />
+          </div>
+        </form>
       </div>
     </StyledDiv>
   );

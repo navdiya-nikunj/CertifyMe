@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 import InputLabel from "@mui/material/InputLabel";
@@ -9,14 +9,9 @@ import Select from "@mui/material/Select";
 import Button from "../atoms/Button";
 import axios from "../../axiosConfig";
 import { useNavigate } from "react-router-dom";
-import { connect, set } from "mongoose";
-
 
 export default function InstituteProfile({ institute }) {
   const templates = useSelector((state) => state.template.templates);
-  const [walletaddress, setWalletaddress] = useState("");
-  const [loading, setLoading] = useState(false);
-
 
   const [selectedTemplate, setSelectedTemplate] = useState(0);
   const navigate = useNavigate();
@@ -40,8 +35,6 @@ export default function InstituteProfile({ institute }) {
   //    });
   //   //  console.log(web3);
   // }
-
-
 
   return (
     <>
@@ -98,7 +91,6 @@ export default function InstituteProfile({ institute }) {
               />)
         )
       } */}
-      
     </>
   );
 }

@@ -6,19 +6,19 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   margin: 2rem 9rem;
+  padding: 2rem;
+  box-shadow: ${(props) => props.theme.light.shadow};
 
   > h2 {
     color: ${({ theme }) => theme.light.secondary};
   }
 `;
 
-
-
 const Certi = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-   padding: 1rem;
+  padding: 1rem;
   > img {
     width: 100%;
     height: 100%;

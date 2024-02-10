@@ -4,6 +4,7 @@ import {
   StyledNavbar,
   StyledNavLink,
   StyledLogo,
+  NavButton,
 } from "../../styles/jsx/navbar.styles";
 import axios from "../../axiosConfig";
 import Button from "../atoms/Button";
@@ -14,7 +15,12 @@ export default function Navbar({ user }) {
   const handleLogout = async (e) => {
     const message = await axios
       .post("/profile/logout", {}, { withCredentials: true })
-      .then((res) => navigate("/", { state: res.data, replace: true }))
+      .then((res) =>
+        navigate("/", {
+          state: { isLogout: true, data: res.data },
+          replace: true,
+        })
+      )
       .catch((error) => console.log(error));
     console.log(message);
   };
@@ -28,7 +34,9 @@ export default function Navbar({ user }) {
           <StyledNavLink to={`/verify`}>Verify Certificate</StyledNavLink>
           {/* <StyledNavLink to={}>Log Out</StyledNavLink> */}
         </div>
-        <Button type="button" text="Log Out" onClick={handleLogout} />
+        <NavButton type="button" onClick={handleLogout}>
+          Log Out
+        </NavButton>
       </StyledNavbar>
       <Outlet />
     </div>

@@ -7,8 +7,7 @@ const StyledDiv = styled.div`
   align-items: center;
   justify-content: space-around;
   background-color: ${(props) => props.theme.light.primary};
-  box-shadow: 0px 0px 20px 3px ${({ theme }) => theme.light.secondary};
-  /* box-shadow: 0px 0px 20px 3px #000; */
+  box-shadow: ${(props) => props.theme.light.shadow};
 
   > div {
     padding: 2rem;

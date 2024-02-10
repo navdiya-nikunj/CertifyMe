@@ -35,6 +35,24 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
+const NavButton = styled.button`
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0 0.5rem;
+  color: ${(props) => props.theme.light.nav.text};
+  transition: all 0.3s ease;
+
+  &:hover {
+    text-shadow: 3px 3px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  &.active {
+    font-weight: bold;
+  }
+`;
+
 const StyledLogo = styled.img`
   height: 2rem;
   width: 7rem;
@@ -57,4 +75,4 @@ const StyledNavbar = styled.nav`
   color: white;
 `;
 
-export { StyledMainNavbar, StyledNavbar, StyledNavLink, StyledLogo };
+export { StyledMainNavbar, StyledNavbar, StyledNavLink, StyledLogo, NavButton };

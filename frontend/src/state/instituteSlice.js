@@ -11,8 +11,11 @@ const instituteSlice = createSlice({
     saved: (state, action) => {
       state.instituteUser = action.payload;
     },
+    cleared: (state) => {
+      state.instituteUser = null;
+    },
   },
 });
 
 export default instituteSlice.reducer;
-export const { saved } = instituteSlice.actions;
+export const { saved, cleared } = instituteSlice.actions;

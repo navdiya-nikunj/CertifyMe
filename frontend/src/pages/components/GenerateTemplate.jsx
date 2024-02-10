@@ -5,6 +5,7 @@ import { saved as templateSaved } from "../../state/templateSlice";
 
 import TextField from "@mui/material/TextField";
 import Button from "../atoms/Button";
+import { StyledDiv } from "../../styles/jsx/generate-template.styles";
 import axios from "../../axiosConfig";
 
 export default function GerenrateTemplate() {
@@ -52,7 +53,7 @@ export default function GerenrateTemplate() {
   };
 
   return (
-    <div>
+    <StyledDiv>
       {/* <Navbar/> */}
       <form onSubmit={handleSubmit}>
         <TextField
@@ -64,7 +65,6 @@ export default function GerenrateTemplate() {
           placeholder="Ex. Certificate Of Achievement"
           required
         />
-        <br />
         <TextField
           type="text"
           name="phrase"
@@ -74,7 +74,6 @@ export default function GerenrateTemplate() {
           placeholder="Ex. This certificate is proudly awarded to"
           required
         />
-        <br />
         <TextField
           id="outlined-textarea"
           name="description"
@@ -104,6 +103,6 @@ export default function GerenrateTemplate() {
         />
         <Button type="submit" text="Submit" />
       </form>
-    </div>
+    </StyledDiv>
   );
 }

@@ -14,8 +14,11 @@ const templateSlice = createSlice({
     restored: (state, action) => {
       state.templates = action.payload;
     },
+    cleared: (state) => {
+      state.templates = [];
+    },
   },
 });
 
 export default templateSlice.reducer;
-export const { saved, restored } = templateSlice.actions;
+export const { saved, restored, cleared } = templateSlice.actions;

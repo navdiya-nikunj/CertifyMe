@@ -11,8 +11,11 @@ const studentSlice = createSlice({
     saved: (state, action) => {
       state.studentUser = action.payload;
     },
+    cleared: (state) => {
+      state.studentUser = null;
+    },
   },
 });
 
 export default studentSlice.reducer;
-export const { saved } = studentSlice.actions;
+export const { saved, cleared } = studentSlice.actions;

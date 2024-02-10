@@ -69,7 +69,7 @@ export default function SignUp() {
           dispatch(studentSaved(res.data));
         }
 
-        navigate("/profile");
+        navigate(`/profile/${res.data._id}`);
       })
       .catch((e) => console.log(e));
   }

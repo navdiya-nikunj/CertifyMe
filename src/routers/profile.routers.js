@@ -1,9 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  console.log("in this profile route cokkie: ", req.cookies);
-  console.log("passport checking");
-  res.status(200).send("My dear user you are authorized");
-});
+const { postTemplateNew } = require("../controllers/template.controllers");
+const { validateSchema } = require("../middlewares/validate.middlewares");
+const {
+  templateValidationSchema,
+} = require("../validators/template.validator");
+
+const templateMiddleware = validateSchema(templateValidationSchema);
+
+router.post("/template/new", templateMiddleware, postTemplateNew);
+
 module.exports = router;

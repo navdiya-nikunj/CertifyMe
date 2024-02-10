@@ -1,18 +1,21 @@
-import React, { useDebugValue, useEffect } from "react";
-import Certificate from "./certificate";
+import { useState } from "react";
+import TextField from "@mui/material/TextField";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import dayjs from "dayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateField } from "@mui/x-date-pickers/DateField";
+import Button from "../atoms/Button";
 
 export default function GenerateCertificate(props) {
-  const { certificate } = props;
+  // const { certificate } = props;
   const [formData, setFormData] = useState({
     studentName: "",
-    studenrWallet: "",
-    // stundentEmail:"",
+    studentWallet: "",
+    rank: "",
+    eventName: "",
   });
-
-  const [certificateData, setCertificateData] = useState({
-    certificateName: "",
-    certificateDesc: "",
-  });
+  const [date, setDate] = useState(dayjs("2022-04-17"));
   function handleChange(e) {
     const value = e?.target?.value;
 
@@ -21,53 +24,65 @@ export default function GenerateCertificate(props) {
       [e?.target?.name]: value,
     });
   }
-  useEffect(() => {
-    // certificateData();
-    setCertificateData({
-      certificateName: certificate.certificateName,
-      certificateDesc: certificate.certificateDesc,
-    });
-  }, []);
-  // const getCertificateData = async () => {
-  //     //fetch certi templet data from database and set certificate data
-  //     setCertificateData({certificateName: "Participation Certificate",certificateDesc: "This is a participation certificate"});
-  //     return ;
-  // }
-  const submit = async () => {
-    console.log(studentName, studenrWallet);
-    const date = Date.now();
-    // return (
-    //     <Certificate formData={formData} certificateData={certificateData} date={date.toLocaleString} />
-    // )
-    // shows certificate - certificate page using navigation
-  };
+  // useEffect(() => {
+  //   // certificateData();
+  //   setCertificateData({
+  //     certificateName: certificate.certificateName,
+  //     certificateDesc: certificate.certificateDesc,
+  //   });
+  // }, []);
 
   return (
     <div>
       <div>
-        <form onSubmit={submit} method="button">
-          <label>Student Name: </label>
-          <input
+        <form>
+          <TextField
             type="text"
             name="studentName"
             value={formData.studentName}
             onChange={handleChange}
-            placeholder="Enter the name of the student"
+            label="Student Name"
             required
           />
           <br />
-          <label>Student Wallet: </label>
-          <input
+          <TextField
             type="text"
-            name="studenrWallet"
-            value={formData.studenrWallet}
+            name="studentWallet"
+            value={formData.studentWallet}
             onChange={handleChange}
-            placeholder="Enter the wallet address of the student"
+            label="Student e-Wallet Address"
             required
           />
+          <TextField
+            type="text"
+            name="rank"
+            value={formData.rank}
+            onChange={handleChange}
+            label="Student Rank"
+            placeholder="1st"
+          />
+          <TextField
+            type="text"
+            name="eventName"
+            value={formData.eventName}
+            onChange={handleChange}
+            label="Event Name"
+          />
           <br />
-          <input type="submit" value="Submit" />
-          <br />
+
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={["DateField", "DateField"]}>
+              <DateField
+                label="Full letter month"
+                value={date}
+                onChange={(newValue) => setDate(newValue)}
+                format="LL"
+                required
+              />
+            </DemoContainer>
+          </LocalizationProvider>
+
+          <Button type="submit" text="Submit" />
         </form>
       </div>
     </div>

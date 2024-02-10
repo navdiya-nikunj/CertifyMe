@@ -15,6 +15,14 @@ const studentSchema = new mongoose.Schema({
     trim: true,
     validate: (value) => validator.isStrongPassword(value),
   },
+  walletAddress: {
+    type: String,
+    unique: true,
+  },
+  // certificates: {
+  //   type: [mongoose.SchemaTypes.ObjectId],
+  //   ref: "Certificate",
+  // },
 });
 
 const Student = mongoose.model("Student", studentSchema);

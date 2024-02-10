@@ -10,6 +10,14 @@ const authMiddleware = passport.authenticate("jwt", { session: false });
 
 app.use("/auth", authRouter);
 
+app.get(
+  "/user",
+  passport.authenticate("jwt", { session: false, failureRedirect: "/" }),
+  (req, res) => {
+    res.send(req.user);
+  }
+);
+
 app.use(authMiddleware);
 //protected routes
 app.use("/profile", profileRouter);

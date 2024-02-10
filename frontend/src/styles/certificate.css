@@ -1,0 +1,173 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans|Pinyon+Script|Rochester");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  line-height: 1.5;
+}
+
+/*1. Text Styling*/
+
+.sans {
+  font-family: "Open Sans", sans-serif;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.text-border {
+  font-style: italic;
+  border-bottom: 1px solid rgb(44, 42, 42);
+  padding: 1px;
+}
+
+/* 2. Container parent styling*/
+.certificate-container {
+  position: relative;
+  width: 90vw;
+  height: 100vh;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.certificate-content {
+  margin: 2rem;
+  width: 90%;
+  height: 95%;
+  text-align: center;
+  border: 5px solid #ffd700;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+/* 3.Header Styling */
+.institute-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.certificate-title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-transform: capitalize;
+  font-family: "Pinyon Script", cursive;
+  letter-spacing: 2px;
+  margin: 0 1rem 1.5rem 1rem;
+}
+
+.student-name {
+  font-family: "Rochester";
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+  color: #000080;
+  /* font-weight: bold; */
+}
+.student-name > span {
+  font-size: 2rem;
+}
+
+.certificate-text {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* 4. Footer styling*/
+.certificate-footer {
+  width: 80%;
+  height: 35%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.certificate-date {
+  line-height: 1.8;
+  font-size: 1rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.certificate-signature {
+  line-height: 1.8;
+  font-size: 1rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+span {
+  font-size: 1.5rem;
+  font-weight: normal;
+}
+
+/* 5. Border Styling */
+.border-left {
+  border-top: 2rem solid #000080;
+  border-left: 2.5rem solid #000080;
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  top: 0;
+  left: 2.5rem;
+  overflow: hidden;
+}
+.border-right {
+  border-bottom: 2rem solid #000080;
+  border-right: 2.5rem solid #000080;
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  bottom: 0;
+  right: 2.5rem;
+  overflow: hidden;
+}
+
+.certificate-ribbon-top {
+  position: absolute;
+  top: -1.2rem;
+  left: -7rem;
+  width: 50%;
+  height: 50%;
+  background: linear-gradient(to bottom right, #ffc107, #ffa000);
+  border-radius: 50% 0 0 50% / 50% 30% 30% 50%;
+  transform: rotate(-45deg);
+}
+.certificate-ribbon-bottom {
+  position: absolute;
+  bottom: -1rem;
+  right: -8rem;
+  width: 50%;
+  height: 50%;
+  background: linear-gradient(to top left, #ffc107, #ffa000);
+  border-radius: 50% 0 0 50% / 50% 30% 30% 50%;
+  transform: rotate(-35deg);
+}
+
+/* 6. Button styling */
+.download {
+  margin: 20px;
+}
+.download-btn {
+  font-size: 15px;
+  border-radius: 20px;
+  padding: 4px 8px;
+  cursor: pointer;
+  border: 2px solid #aaa59f;
+  color: #c96c01;
+  background-color: white;
+}
+.download-btn:hover {
+  transform: translate(-3px, -3px);
+  border: 2px solid #c96c01;
+  background-color: #fff;
+}

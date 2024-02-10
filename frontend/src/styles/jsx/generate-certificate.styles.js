@@ -20,13 +20,13 @@ const StyledDiv = styled.div`
 
     > h2 {
       color: ${(props) => props.theme.light.secondary};
+      margin: 1rem;
     }
     > form {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 80vh;
-
+      min-height: 60vh;
     }
   }
 `;

@@ -25,6 +25,8 @@ import {
   FAQs,
   Contact,
   Section2,
+  UsageDiv,
+  ImageDiv,
 } from "../../styles/jsx/home.styles";
 import { Application } from "@splinetool/runtime";
 
@@ -56,28 +58,45 @@ export default function Home() {
             Empower your education with secure and verifiable blockchain-based
             certifications.
           </p>
+          <Button
+            text="Get Started"
+            type="button"
+            onCLick={() => navigate("/signup")}
+          />
         </ShortInfo>
-        <div>
-          <img src="/certificate.svg" />
-        </div>
       </Section>
       <Section>
-        <div>
-          <img src="/student.svg" />
-        </div>
-        <ShortInfo>
-          <h2>Ready to get certified?</h2>
-          <Button
-            type="button"
-            text="Sign Up"
-            onClick={() => navigate("/signup")}
-          />
-          <Button
-            type="button"
-            text="Login"
-            onClick={() => navigate("/login")}
-          />
-        </ShortInfo>
+        <UsageDiv>
+          <h1>Why to use CertifyMe?</h1>
+          <div>
+            <div>
+              <ImageDiv>
+                <img src="/decentralized.jpg" />
+              </ImageDiv>
+              <h3>Decentralize</h3>
+              <p>
+                No need for a central authority to issue or verify credentials
+              </p>
+            </div>
+            <div>
+              <ImageDiv>
+                <img src="/secure.jpg" />
+              </ImageDiv>
+              <h3>Secure</h3>
+              <p>Credentials are cryptographically signed by the issuer</p>
+            </div>
+            <div>
+              <ImageDiv>
+                <img src="/modern.jpg" />
+              </ImageDiv>
+              <h3>Modern</h3>
+              <p>
+                No more paper certificates. Share your credentials digitally in
+                a modern, secure, and verifiable way.
+              </p>
+            </div>
+          </div>
+        </UsageDiv>
       </Section>
       <Section>
         <HowItWorks>

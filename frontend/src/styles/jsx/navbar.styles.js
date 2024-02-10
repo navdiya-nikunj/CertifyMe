@@ -42,6 +42,7 @@ const NavButton = styled.button`
   font-family: inherit;
   font-size: inherit;
   padding: 0 0.5rem;
+  cursor: pointer;
   color: ${(props) => props.theme.light.nav.text};
   transition: all 0.3s ease;
 

@@ -80,6 +80,18 @@ export default function StudentProfile({ student }) {
             });
           });
         setLoading(false);
+      }else{
+        toast.error("Please install metamask", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Slide,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -154,21 +166,6 @@ export default function StudentProfile({ student }) {
       ) : loading ? (
         <>
           <LinearProgress />
-          {setTimeout(() => {
-            setLoading(false);
-
-            toast.error("You don't have any installed wallet!!", {
-              position: "bottom-center",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-              transition: Slide,
-            });
-          }, 30000)}
         </>
       ) : (
         <StyledPage>

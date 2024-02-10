@@ -28,13 +28,7 @@ const StyledCards = styled.div`
   row-gap: 2rem;
 `;
 const StyledCardsDiv = styled.div`
-  background-image: radial-gradient(
-    circle 369px at -2.9% 12.9%,
-    rgba(247, 234, 163, 1) 0%,
-    rgba(236, 180, 238, 0.56) 46.4%,
-    rgba(163, 203, 247, 1) 100.7%
-  );
   padding: 1rem;
-  box-shadow: 0px 0px 15px 10px #d6d0f7;
+  box-shadow: ${(props) => props.theme.light.shadow};
 `;
 export { StyledPage, StyledCards, StyledCardsDiv };

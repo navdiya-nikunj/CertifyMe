@@ -7,6 +7,7 @@ import Web3 from "web3";
 import axios from "axios";
 import textfieldTheme from "../../styles/jsx/textfield.styles";
 import { toast, Slide, ToastContainer } from "react-toastify";
+import { LinearProgress } from "@mui/material";
 
 export default function VerifyCertificate() {
   const [certificateId, setCertificateId] = useState("");
@@ -14,6 +15,7 @@ export default function VerifyCertificate() {
   const [image, setImage] = useState("");
   const [blockExplorerLink, setBlockExplorerLink] = useState("");
   const [openseaLink, setOpenSeaLink] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleChange(e) {
     const value = e?.target?.value;
@@ -25,8 +27,8 @@ export default function VerifyCertificate() {
   }
   // Function to handle verification
   const handleVerification = async (e) => {
-    console.log(certificateId);
-    const contractAddress = "0x23d6E35159Cc6979667577d50F1148f30bb8E01d";
+    setIsLoading(true);
+    const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
     try {
       const web3 = new Web3(window.ethereum);
       const contract = new web3.eth.Contract(CertiABI, contractAddress);
@@ -57,9 +59,11 @@ export default function VerifyCertificate() {
           theme: "colored",
           transition: Slide,
         });
+        setIsLoading(false);
       });
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
       setVerificationResult("Not Verified");
       if (!Web3.ethereum) {
         setVerificationResult("");
@@ -91,7 +95,8 @@ export default function VerifyCertificate() {
   };
 
   return (
-    <>
+    <>{isLoading ? (<LinearProgress />):(
+      <>
       <Container>
         <h2>Verify Certificate</h2>
         <div>
@@ -125,6 +130,8 @@ export default function VerifyCertificate() {
         )}
       </Container>
       <ToastContainer />
+      </>
+      )}
     </>
   );
 }

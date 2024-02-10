@@ -6,10 +6,9 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
+import { StyledPage } from "../../styles/jsx/instituteProfile.styles";
 
 import Button from "../atoms/Button";
-import axios from "../../axiosConfig";
-
 import { useNavigate } from "react-router-dom";
 
 export default function InstituteProfile({ institute }) {
@@ -95,6 +94,6 @@ export default function InstituteProfile({ institute }) {
               />)
         )
       } */}
-    </>
+    </StyledPage>
   );
 }

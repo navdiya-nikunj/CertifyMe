@@ -1,7 +1,11 @@
 #root {
-  padding: 1rem;
+  /* padding: 1rem; */
   text-align: center;
-  box-sizing: border-box;
   background-color: #f5f5f5;
   min-height: 100vh;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }

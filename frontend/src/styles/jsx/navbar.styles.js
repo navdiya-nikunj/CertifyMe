@@ -9,17 +9,21 @@ const StyledMainNavbar = styled.nav`
   position: sticky;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 0.2rem;
   background-color: #a3caf6;
-  background: linear-gradient(to right, #f5d9e4, #d6d0f7);
+  background: linear-gradient(
+    to right,
+    ${({ theme }) => theme.light.nav.color1},
+    ${({ theme }) => theme.light.nav.color2}
+  );
   z-index: 100;
-  
 `;
 
 const StyledNavLink = styled(NavLink)`
   text-decoration: none;
   padding: 1rem;
-  color: ${(props) => props.theme.light.secondary};
+  color: ${(props) => props.theme.light.nav.text};
   transition: all 0.3s ease;
 
   &:hover {
@@ -34,12 +38,11 @@ const StyledNavLink = styled(NavLink)`
 const StyledLogo = styled.img`
   height: 2rem;
   width: 7rem;
-`
-
+`;
 
 const StyledNavbar = styled.nav`
-padding-left: 1rem;
-margin-top: 0.5rem;
+  padding-left: 1rem;
+  margin-top: 0.5rem;
   border-radius: 20px;
   font-size: 1.2rem;
   height: 9%;
@@ -52,6 +55,6 @@ margin-top: 0.5rem;
   backdrop-filter: blur(8px);
   z-index: 100;
   color: white;
-`
+`;
 
-export { StyledMainNavbar,StyledNavbar, StyledNavLink,StyledLogo };
+export { StyledMainNavbar, StyledNavbar, StyledNavLink, StyledLogo };

@@ -1,10 +1,16 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 // Styled components
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 80vh;
+  margin: 2rem 9rem;
+
+  > h2 {
+    color: ${({ theme }) => theme.light.secondary};
+  }
 `;
 
 const Input = styled.input`

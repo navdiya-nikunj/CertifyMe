@@ -13,7 +13,6 @@ import TextField from "@mui/material/TextField";
 
 import loginImage from "/login.svg";
 
-
 import { FormControl } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -46,12 +45,11 @@ export default function Login() {
     event.preventDefault();
   };
 
-
   useEffect(() => {
-//     const canvas = document.getElementById('canvas');
-// const app = new Application(canvas);
-// app.load('https://prod.spline.design/rgECT3Z9ivrBOmHV/scene.splinecode');
-  },[])
+    //     const canvas = document.getElementById('canvas');
+    // const app = new Application(canvas);
+    // app.load('https://prod.spline.design/rgECT3Z9ivrBOmHV/scene.splinecode');
+  }, []);
 
   function handleChange(e) {
     const value = e?.target?.value;
@@ -102,14 +100,13 @@ export default function Login() {
       });
   }
 
-
   return (
     <StyledDiv>
       <div>
-      <img src={loginImage} alt="login" />
+        <img src={loginImage} alt="login" />
       </div>
       <form onSubmit={handleSubmit}>
-        <h1>Login page</h1>
+        <h1>Login</h1>
         <TextField
           sx={textfieldTheme}
           name="email"

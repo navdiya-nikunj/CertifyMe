@@ -25,10 +25,10 @@ export default function Navbar({ user }) {
         <div>
           <StyledNavLink to="/">Home</StyledNavLink>
           <StyledNavLink to={`/profile/${user?._id}`}>Profile</StyledNavLink>
-          <StyledNavLink to={`/verify`}>VerifyCertificate</StyledNavLink>
+          <StyledNavLink to={`/verify`}>Verify Certificate</StyledNavLink>
           {/* <StyledNavLink to={}>Log Out</StyledNavLink> */}
         </div>
-          <Button type="button" text="Log Out" onClick={handleLogout} />
+        <Button type="button" text="Log Out" onClick={handleLogout} />
       </StyledNavbar>
       <Outlet />
     </div>

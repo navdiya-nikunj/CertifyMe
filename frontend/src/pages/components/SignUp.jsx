@@ -6,7 +6,9 @@ import { saved as instituteSaved } from "../../state/instituteSlice";
 
 import Button from "../atoms/Button";
 import axios from "../../axiosConfig";
+
 import { StyledDiv } from "../../styles/jsx/signup.styles";
+import textfieldTheme from "../../styles/jsx/textfield.styles";
 
 import { FormControl } from "@mui/material";
 import TextField from "@mui/material/TextField";
@@ -23,7 +25,6 @@ import { toast, Slide, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useTheme } from "styled-components";
 import signupImage from "/signup.svg";
-
 
 export default function SignUp() {
   const theme = useTheme();
@@ -97,83 +98,83 @@ export default function SignUp() {
   return (
     <StyledDiv>
       <div>
-      <img src={signupImage} alt="login" />
+        <img src={signupImage} alt="login" />
       </div>
-        <form onSubmit={handleSubmit}>
-          <h1>SignUp page</h1>
-          <TextField
-            sx={{ m: 1, width: "100%" }}
-            name="email"
-            id="outlined-basic"
-            label="Email"
-            type="email"
-            variant="outlined"
+      <form onSubmit={handleSubmit}>
+        <h1>Sign Up</h1>
+        <TextField
+          sx={textfieldTheme}
+          name="email"
+          id="outlined-basic"
+          label="Email"
+          type="email"
+          variant="outlined"
+          onChange={handleChange}
+          value={formData.email}
+          required
+        />
+        <FormControl sx={{ m: 1, width: "100%" }} variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">
+            Password
+          </InputLabel>
+          <OutlinedInput
+            name="password"
+            id="outlined-adornment-password"
+            type={showPassword ? "text" : "password"}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+            value={formData.password}
             onChange={handleChange}
-            value={formData.email}
             required
           />
-          <FormControl sx={{ m: 1, width: "100%" }} variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password">
-              Password
-            </InputLabel>
-            <OutlinedInput
-              name="password"
-              id="outlined-adornment-password"
-              type={showPassword ? "text" : "password"}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </FormControl>
-          <FormGroup sx={{ width: "100%" }}>
-            <FormControlLabel
-              sx={{ m: 1, width: "100%" }}
-              name="isInstitute"
-              checked={checked}
-              onChange={handleChecked}
-              control={
-                <Checkbox
-                  sx={{
-                    "&.Mui-checked": {
-                      color: theme.light.secondary,
-                    },
-                  }}
-                />
-              }
-              label="Register as Institute"
-            />
-          </FormGroup>
-          {checked ? (
-            <TextField
-              sx={{ m: 1, width: "100%" }}
-              name="instituteName"
-              id="outlined-basic"
-              label="Institute Name"
-              variant="outlined"
-              onChange={handleChange}
-              value={formData.instituteName}
-              required
-            />
-          ) : (
-            <></>
-          )}
+        </FormControl>
+        <FormGroup sx={{ width: "100%" }}>
+          <FormControlLabel
+            sx={{ m: 1, width: "100%" }}
+            name="isInstitute"
+            checked={checked}
+            onChange={handleChecked}
+            control={
+              <Checkbox
+                sx={{
+                  "&.Mui-checked": {
+                    color: theme.light.secondary,
+                  },
+                }}
+              />
+            }
+            label="Register as Institute"
+          />
+        </FormGroup>
+        {checked ? (
+          <TextField
+            sx={{ m: 1, width: "100%" }}
+            name="instituteName"
+            id="outlined-basic"
+            label="Institute Name"
+            variant="outlined"
+            onChange={handleChange}
+            value={formData.instituteName}
+            required
+          />
+        ) : (
+          <></>
+        )}
 
-          <Button type="submit" text="Sign Up" />
-          <ToastContainer />
-        </form>
+        <Button type="submit" text="Sign Up" />
+        <ToastContainer />
+      </form>
     </StyledDiv>
   );
 }

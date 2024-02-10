@@ -3,20 +3,23 @@ const theme = {
     fontFamily: "Roboto",
     fontSize: "1rem",
   },
-  dark: {
-    primary: "#212d40",
-    secondary: "#e4e4e4",
-    text: "#fff",
-    secondaryText: "#000",
-    // primaryText: "#e4e4e4",
-  },
   light: {
-    primary: "#fff",
-    secondary: "#212D40",
+    nav: {
+      color1: "#f5d9e4",
+      color2: "#d6d0f7",
+      text: "#014B7A",
+    },
+    backgroundGradient: {
+      color1: "#f7eaa3",
+      color2: "#ecb4ee8f",
+      color3: "#a3cbf7",
+    },
+    bgColor: "#a3caf6",
+
+    primary: "#F5F5F5",
+    secondary: "#017ECB",
     text: "#000",
     secondaryText: "#fff",
-    color1: "#280594",
-    color2: "#394DB3"
     // primaryText: "#212d40",
   },
 };

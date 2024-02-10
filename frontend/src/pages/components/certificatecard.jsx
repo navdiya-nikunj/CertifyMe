@@ -30,7 +30,7 @@ export default function CertificateCard({
 
     return (
         <>
-            <Card sx={{ maxWidth: 345 }}>
+            <Card sx={{ maxWidth: 400,  minWidth:300, maxHeight:400, minHeight:300}}>
                 <CardActionArea>
                     <CardMedia
                         component="img"
@@ -39,7 +39,7 @@ export default function CertificateCard({
                         alt={name}
                     />
                     <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
+                        <Typography gutterBottom variant="h6" component="div" >
                             {name}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">

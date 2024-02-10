@@ -15,6 +15,8 @@ const theme = {
     secondary: "#212D40",
     text: "#000",
     secondaryText: "#fff",
+    color1: "#280594",
+    color2: "#394DB3"
     // primaryText: "#212d40",
   },
 };

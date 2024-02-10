@@ -10,7 +10,7 @@ const StyledDiv = styled.div`
   align-items: center;
   justify-content: center;
   background-color: ${(props) => props.theme.light.primary};
-
+  
   > div {
     height: 50%;
     width: 50%;

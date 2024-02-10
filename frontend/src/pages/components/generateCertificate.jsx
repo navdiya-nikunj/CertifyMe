@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { json, useLocation, useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import dayjs from "dayjs";
@@ -12,6 +12,9 @@ import axios from 'axios';
 const JWT = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI5MjcwZTY3Ni1iZGVkLTRlN2EtYjgzMy04MmMwMTE1MDAyODciLCJlbWFpbCI6ImtyaXBuaWNrM0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJpZCI6IkZSQTEiLCJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MX0seyJpZCI6Ik5ZQzEiLCJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MX1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlLCJzdGF0dXMiOiJBQ1RJVkUifSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiZDlmODU2NDBjODI3MDc0ZTE3MDkiLCJzY29wZWRLZXlTZWNyZXQiOiI1YWM2ODkxYTI2MzhmZTNjZWY1ZGRlZDMwYzVlZDRiYmU0YzE4YjYxYTM5NDNkMmNhYWM2YjEzMzY0ZGQ5NDY3IiwiaWF0IjoxNzA2ODkxMjg3fQ.4mlbR8uKFxcsdtZFcqqCvt8arpg7UR5XDVDAeYQCw7E';
 import Web3 from "web3";
 import CertiABI from "../../certificate.json"
+import LinearProgress from '@mui/material/LinearProgress';
+import { toast, Slide, ToastContainer } from "react-toastify";
+
 
 
 export default function GenerateCertificate() {
@@ -23,10 +26,9 @@ export default function GenerateCertificate() {
   const [formData, setFormData] = useState({
     studentName: "",
     studentWallet: "",
-    rank: "",
     eventName: "",
   });
-
+  const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState(dayjs());
   function handleChange(e) {
     const value = e?.target?.value;
@@ -38,36 +40,72 @@ export default function GenerateCertificate() {
   }
 
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     const imgData = await downloadPDF();
     await uploadimgToIPFS(imgData).then((res) => {
       console.log("res.data",res.data.IpfsHash);
       uploadMetadatatoIPFS(res.data.IpfsHash).then((res)=>{
         contractCall(res.data.IpfsHash)
-        // navigate(-1);
       })
+      setDate(dayjs());
+      setFormData({studentName: "",
+      studentWallet: "",
+      eventName: "",});
     })
-    
-    //blockchain function
-    // backend calling to save the url of certificate in student model
   };
 
 
   const contractCall = async (hash) => { 
-        // const contractAddress = "0x751a6De314636dBdaEeC0Df91671556AD6A49a1C";
         const contractAddress = "0x23d6E35159Cc6979667577d50F1148f30bb8E01d";
         try{
           await window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts)=>{
             const web3 = new Web3(window.ethereum)
             const contract = new web3.eth.Contract(CertiABI, contractAddress);
-            contract.methods.awardItem(formData.studentWallet,"https://ipfs.io/ipfs/"+hash).send({from: accounts[0]}).then((transactonHash,error) => {
-              console.log(transactonHash.events.MetadataUpdate.returnValues._tokenId);  
+            contract.methods.awardItem(formData.studentWallet,"https://ipfs.io/ipfs/"+hash).send({from: accounts[0]}).then((transactionHash,error) => {
+              console.log(transactionHash.transactionHash);
+              setIsLoading(false);
+              toast.success("Certificate Generated ", {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Slide,
+              });
         }).catch(error => {
+          setIsLoading(false);
           console.log(error);
+          toast.error("Please check student wallet address again", {
+            position: "bottom-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Slide,
+          });
         });
           });
         }catch(error){
+          setIsLoading(false);
           console.log(error);
+          toast.error("Please check student wallet address again", {
+            position: "bottom-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Slide,
+          });
         }
   }
 
@@ -88,6 +126,18 @@ export default function GenerateCertificate() {
 
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
+      toast.error("soemthing went wrong in generating certificate ", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Slide,
+      });
     }
   }
 
@@ -95,8 +145,12 @@ export default function GenerateCertificate() {
     const data = JSON.stringify({
       pinataContent: {
         name: formData.studentName,
-        description: description,
+        description: formData.studentName+" "+ description + formData.eventName,
         image: "https://ipfs.io/ipfs/"+hash,
+        attributes: [
+          {trait_type:"instituteName",value:instituteName},
+          {trait_type:"Date",value:date},
+        ]
       },
       pinataMetadata: {
         name: "metadata.json"
@@ -113,10 +167,25 @@ export default function GenerateCertificate() {
         return res;
       } catch (error) {
         console.log(error);
+        setIsLoading(false);
+        toast.error("Something went wrong generating the certificate", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Slide,
+        });
       }
   }
   return (
     <>
+    {
+      isLoading ? (<LinearProgress/>):(
+        <>
       <div>
         <form method="post" onSubmit={handleSubmit}>
           <TextField
@@ -136,14 +205,7 @@ export default function GenerateCertificate() {
             label="Student e-Wallet Address"
             required
           />
-          <TextField
-            type="text"
-            name="rank"
-            value={formData.rank}
-            onChange={handleChange}
-            label="Student Rank"
-            placeholder="1st"
-          />
+          
           <TextField
             type="text"
             name="eventName"
@@ -176,12 +238,15 @@ export default function GenerateCertificate() {
           eventName={formData.eventName}
           studentName={formData.studentName}
           studentWallet={formData.studentWallet}
-          rank={formData.rank}
           date={date}
           signature={signature}
           handleSubmit={handleSubmit}
         />
       </div>
+      </>
+      )
+    }
+    <ToastContainer/>
     </>
   );
 }

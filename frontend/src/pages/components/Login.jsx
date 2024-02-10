@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { saved as studentSaved } from "../../state/studentSlice";
@@ -10,6 +10,10 @@ import { StyledDiv } from "../../styles/jsx/login.styles";
 import textfieldTheme from "../../styles/jsx/textfield.styles";
 
 import TextField from "@mui/material/TextField";
+
+import { Application } from '@splinetool/runtime';
+
+
 
 import { FormControl } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
@@ -42,6 +46,13 @@ export default function Login() {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+
+  useEffect(() => {
+//     const canvas = document.getElementById('canvas');
+// const app = new Application(canvas);
+// app.load('https://prod.spline.design/rgECT3Z9ivrBOmHV/scene.splinecode');
+  },[])
 
   function handleChange(e) {
     const value = e?.target?.value;
@@ -92,9 +103,12 @@ export default function Login() {
       });
   }
 
+
   return (
     <StyledDiv>
-      <div></div>
+      <div>
+      <canvas id="canvas"/>
+      </div>
       <form onSubmit={handleSubmit}>
         <h1>Login page</h1>
         <TextField

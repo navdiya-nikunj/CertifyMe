@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "./axiosConfig";
+import "./app.css"
 
 import { saved as studentSaved } from "./state/studentSlice";
 import { saved as instituteSaved } from "./state/instituteSlice";
@@ -17,6 +18,7 @@ import ProtectedRoute from "./pages/components/ProtectedRoute";
 import InstituteProfile from "./pages/components/InstituteProfile";
 import GenerateTemplate from "./pages/components/GenerateTemplate";
 import GenerateCertificate from "./pages/components/GenerateCertificate";
+
 
 function App() {
   const dispatch = useDispatch();

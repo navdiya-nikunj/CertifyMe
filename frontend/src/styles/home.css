@@ -1,0 +1,87 @@
+/* HomePage.css */
+.home-page {
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.short-info {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.short-info h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.cta {
+    background-color: #f9f9f9;
+    padding: 50px 0;
+    text-align: center;
+}
+
+.cta h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.cta-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin: 0 10px;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.cta-button:hover {
+    background-color: #0056b3;
+}
+
+.how-it-works, .faqs, .contact {
+    background-color: #f9f9f9;
+    padding: 50px 0;
+}
+
+.how-it-works h2, .faqs h2, .contact h2 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.faq {
+    margin-bottom: 30px;
+}
+
+.faq h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-links li {
+    display: inline;
+    margin-right: 10px;
+}
+
+.footer-links a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}

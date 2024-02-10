@@ -5,28 +5,28 @@ import Web3 from "web3";
 import certiABI from "../../certificate.json";
 import CertificateCard from "./CertificateCard";
 
+import {StyledPage, StyledCards} from "../../styles/jsx/studentProfile.styles";
+
+import LinearProgress from '@mui/material/LinearProgress';
+import { toast, Slide, ToastContainer } from "react-toastify";
+
+
+
 export default function StudentProfile({ student }) {
   const contractAddress = "0x23d6E35159Cc6979667577d50F1148f30bb8E01d";
   const [walletAddress, setWalletAddress] = useState("");
   const [isConnected, setIsConnected] = useState(false);
   const [certificateIDs, setCertificateIDs] = useState([]);
   const [certificatesData, setCertificatesData] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     showCertificates();
   }, [isConnected]);
 
   useEffect(() => {
     fetchData();
-    // console.log(certificatesData);
+    console.log(certificatesData.length);
   }, [certificateIDs]);
-
-  async function handleClick(e) {
-    await axios
-      .get("/profile", { withCredentials: true })
-      .then()
-      .catch((error) => console.log(error));
-  }
 
   const showCertificates = async () => {
     if (isConnected) {
@@ -42,38 +42,59 @@ export default function StudentProfile({ student }) {
   };
 
   const connectwallet = async () => {
-    if (window.ethereum) {
-      try {
+    try {
+      setLoading(true);
+      if (window.ethereum) {
         await window.ethereum
           .request({ method: "eth_requestAccounts" })
           .then((accounts) => {
             setWalletAddress(accounts[0]);
             setIsConnected(true);
+            toast.success("Wallet Connected Sucessfully", {
+              position: "bottom-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              transition: Slide,
+            });
           })
           .catch((error) => {
             console.log(error);
+            toast.error(error.message, {
+              position: "bottom-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              transition: Slide,
+            });
           });
+        setLoading(false);}
       } catch (error) {
         console.log(error);
-      }
+        toast.error("Something went wrong", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Slide,
+        });
+     
     }
   };
 
   const fetchData = async () => {
-    // let d = []
-    // certificateIDs.map(async (certificateId)=>{
-    //   const web3 = new Web3(window.ethereum);
-    // const contract = new web3.eth.Contract(certiABI, contractAddress);
-    //   const url = await contract.methods.tokenURI(certificateId).call().then((url) => {
-    //     return url;
-    //   })
-    // const t = await axios.get(url).then((res) => {
-    //   return res.data;
-    // })
-    // // console.log(t);
-    // d.push(t);
-    // })
-    // setCertificatesData(d);
     try {
       const web3 = new Web3(window.ethereum);
       const contract = new web3.eth.Contract(certiABI, contractAddress);
@@ -87,27 +108,56 @@ export default function StudentProfile({ student }) {
 
       const certificatesDataArray = await Promise.all(certificateDataPromises);
       setCertificatesData(certificatesDataArray);
+      setLoading(false);
     } catch (error) {
+      toast.error("Error fetching certificate data", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Slide,
+      });
+      setLoading(false);
       console.error("Error fetching certificate data:", error);
     }
   };
+
   return (
     <>
-      Profile page
-      <Button type="submit" text="click me" onClick={handleClick} />
       {walletAddress !== "" ? (
-        `Connected As: ${walletAddress}`
+        <div style={{marginTop: "10px", backdropFilter: "blur(10px)", fontSize: "1.5em", textAlign: "center", marginBottom: "10px"}}>
+          Connected As: {walletAddress}
+        </div>
       ) : (
-        <Button type="button" text="connect wallet" onClick={connectwallet} />
+          loading ? (
+            <LinearProgress />
+          ) :(<StyledPage>
+            <h1>Connect your wallet to see your certificates </h1>
+            <Button type="button" text="connect wallet" onClick={connectwallet} />
+          </StyledPage>)
       )}
-      {certificatesData.map((certificate) => (
+      {
+      
+      isConnected && (<StyledCards> {certificatesData.map((certificate) => (
         <CertificateCard
           key={certificate.image} // Make sure to provide a unique key for each component
           image={certificate.image}
           name={certificate.name}
           description={certificate.description}
         />
+  
       ))}
+      </StyledCards> )
+      
+      }
+      {isConnected && !certificatesData.length && !loading && 
+        <p>Sorry but you are not worthy of living.</p>
+      }
+      <ToastContainer />
     </>
   );
 }

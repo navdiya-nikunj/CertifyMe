@@ -22,7 +22,7 @@ The Blockchain Certification Platform addresses the challenges of traditional ce
 - Frontend: React, styled-components
 - Backend: Node.js, Express.js
 - Database: Mongodb, Atlas
-- Blockchain: Ethereum Blockchain
+- Blockchain: Polygon Blockchain
 - Smart Contracts: ERC-721 standard
 - IPFS Integration: Pinata IPFS service
 - Wallet Integration: MetaMask

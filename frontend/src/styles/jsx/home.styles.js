@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import theme from "../theme";
 import { Link } from "react-router-dom";
 const Container = styled.div`
@@ -41,23 +41,8 @@ const ShortInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  align-items: flex-start;
+  align-items: center;
   font-size: 1.7rem;
-
-  /* text-align: center;
-  
-
-  > h2 {
-    font-size: 1.5rem;
-    color: ${({ theme }) => theme.light.secondary};
-  }
-
-  > h1 {
-    text-shadow: 3px 3px 2px rgba(0, 0, 0, 0.3);
-    color: ${(props) => props.theme.light.secondary};
-    font-weight: bold;
-    font-size: 3rem;
-  } */
 `;
 
 const UsageDiv = styled.div`

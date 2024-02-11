@@ -65,11 +65,13 @@ export default function Home() {
             Empower your education with secure and verifiable blockchain-based
             certifications.
           </p>
-          <Button
-            text="Get Started"
-            type="button"
-            onCLick={() => navigate("/signup")}
-          />
+          <div>
+            <Button
+              text="Get Started"
+              type="button"
+              onCLick={() => navigate("/signup")}
+            />
+          </div>
         </ShortInfo>
       </Section>
       <Section>

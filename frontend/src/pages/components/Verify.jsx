@@ -134,12 +134,10 @@ export default function VerifyCertificate() {
                   />
                 </ButtonDiv>
               </div>
-            </FormDiv>
-            {verificationResult && <p>{verificationResult}</p>}
+              {verificationResult && <p>{verificationResult}</p>}
             {blockExplorerLink && (
               <a href={blockExplorerLink} target="_blank" rel="noreferrer">
                 View on BlockExplorer
-
               </a>
             )}
             {openseaLink && (
@@ -147,6 +145,8 @@ export default function VerifyCertificate() {
                 View on OpenSea
               </a>
             )}
+            </FormDiv>
+            
             {image && (
               <Certi>
                 <img src={image} alt="certificate" />

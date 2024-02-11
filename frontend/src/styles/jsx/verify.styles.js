@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 // Styled components
 const Container = styled.div`
-  height: 100vh;
+  min-height: 100vh;
+  background-size: cover;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,6 +20,14 @@ const Container = styled.div`
     color: white;
     margin: 1.5rem;
   }
+  a {
+    text-decoration: none;
+    color: white;
+
+    &:hover {
+      color: #444;
+}
+}
 `;
 
 const FormDiv = styled.div`

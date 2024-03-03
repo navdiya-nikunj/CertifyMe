@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-
+import { useNavigate } from "react-router-dom";
 import { saved as templateSaved } from "../../state/templateSlice";
 
 import TextField from "@mui/material/TextField";
@@ -9,8 +9,10 @@ import Button from "../atoms/Button";
 import textfieldTheme from "../../styles/jsx/textfield.styles";
 import { StyledDiv } from "../../styles/jsx/generate-template.styles";
 import axios from "../../axiosConfig";
+import { toast,ToastContainer, Slide } from "react-toastify";
 
 export default function GerenrateTemplate() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: "",
     phrase: "",
@@ -50,8 +52,23 @@ export default function GerenrateTemplate() {
       .then((res) => {
         console.log(res.data);
         dispatch(templateSaved(res.data));
+        navigate(-1);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log("err",error);
+        toast.error("Error in creating template", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Slide,
+        });
+      });
+  
   };
 
   return (
@@ -113,6 +130,7 @@ export default function GerenrateTemplate() {
           <div>
             <Button type="submit" text="Submit" />
           </div>
+          <ToastContainer/>
         </form>
       </div>
     </StyledDiv>

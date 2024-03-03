@@ -31,7 +31,28 @@ export default function VerifyCertificate() {
     setOpenSeaLink("");
   }
   // Function to handle verification
-  const handleVerification = async (e) => {
+  const handleVerification = async () => {
+
+    if (!window.ethereum) {
+      setVerificationResult("");
+      toast.error(
+        "You don't have any web3 wallet or web3 instance!! Or you haven't added the certificateID",
+        {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Slide,
+        }
+      );
+      return;
+    }
+
+
     setIsLoading(true);
     const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
     try {
@@ -68,37 +89,21 @@ export default function VerifyCertificate() {
       });
     } catch (error) {
       console.log(error);
-      setIsLoading(false);
       setVerificationResult("Not Verified");
-      if (!Web3.ethereum) {
-        setVerificationResult("");
-        toast.error(
-          "You don't have any web3 wallet or web3 instance!! Or you haven't added the certificateID",
-          {
-            position: "bottom-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Slide,
-          }
-        );
-      } else {
-        toast.error("Not verified Certificate or ID.", {
-          position: "bottom-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          transition: Slide,
-        });
-      }
+      setIsLoading(false);
+      
+      toast.error("Not verified Certificate or ID.", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Slide,
+      });
+      
     }
   };
 
@@ -153,9 +158,9 @@ export default function VerifyCertificate() {
               </Certi>
             )}
           </Container>
-          <ToastContainer />
         </>
       )}
+      <ToastContainer />
     </>
   );
 }

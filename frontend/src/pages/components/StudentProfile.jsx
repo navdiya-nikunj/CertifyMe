@@ -14,6 +14,7 @@ import {
 import LinearProgress from "@mui/material/LinearProgress";
 import { toast, Slide, ToastContainer } from "react-toastify";
 import walletImage from "/wallet.svg";
+import { set } from "mongoose";
 
 export default function StudentProfile({ student }) {
   const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
@@ -62,13 +63,12 @@ export default function StudentProfile({ student }) {
             theme: "colored",
             transition: Slide,
           });
-          setLoading(false);
+          // setLoading(false);
           return false;
         }else {
           return true;
         }
       });
-        console.log("res",res);
         if(!res){
           return;
         }
@@ -103,7 +103,7 @@ export default function StudentProfile({ student }) {
               transition: Slide,
             });
           });
-        setLoading(false);
+        // setLoading(false);
       } else {
 
         toast.error("Please install MetaMask", {
@@ -118,6 +118,7 @@ export default function StudentProfile({ student }) {
           theme: "colored",
           transition: Slide,
         });
+        // setLoading(false);
       }
     } catch (error) {
       console.log(error);
@@ -132,10 +133,12 @@ export default function StudentProfile({ student }) {
         theme: "colored",
         transition: Slide,
       });
+      // setLoading(false);
     }
   };
 
   const fetchData = async () => {
+    // setLoading(true);
     try {
       const web3 = new Web3(window.ethereum);
       const contract = new web3.eth.Contract(certiABI, contractAddress);
@@ -196,17 +199,15 @@ export default function StudentProfile({ student }) {
       ) : (
         <StyledPage>
           {/* <img src={walletImage}/> */}
+          <h1>Connect your wallet to see your certificates </h1>
           <div>
-            <h1>Connect your wallet to see your certificates </h1>
-            <div>
-              <Button
-                type="button"
-                text="Connect Wallet"
-                onClick={connectwallet}
-              />
-            </div>
+            <Button
+              type="button"
+              text="Connect Wallet"
+              onClick={connectwallet}
+            />
           </div>
-        </StyledPage>
+        </StyledPage>   
       )}
       {isConnected && !loading && certificatesData.length !== 0 ? (
         <StyledCardsDiv>
@@ -226,7 +227,7 @@ export default function StudentProfile({ student }) {
         </StyledCardsDiv>
       ) : (
         <>
-          {isConnected && !loading && (
+          {!loading && isConnected   && (
             <p>Sorry but you Don't Have any Certificates in your Profile.</p>
           )}
         </>

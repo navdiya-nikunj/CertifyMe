@@ -14,7 +14,6 @@ import {
 import LinearProgress from "@mui/material/LinearProgress";
 import { toast, Slide, ToastContainer } from "react-toastify";
 import walletImage from "/wallet.svg";
-import { set } from "mongoose";
 
 export default function StudentProfile({ student }) {
   const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;

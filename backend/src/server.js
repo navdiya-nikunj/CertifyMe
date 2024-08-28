@@ -5,7 +5,7 @@ const app = express();
 require("./db/mongoose");
 const port = process.env.PORT;
 
-app.use(express.static('./frontend/dist'))
+app.use(express.static('../frontend/dist'))
 app.use(
   cors({
     origin: `https://certify-me-rho.vercel.app`,

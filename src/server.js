@@ -5,6 +5,7 @@ const app = express();
 require("./db/mongoose");
 const port = process.env.PORT;
 
+app.use(express.static('./frontend/dist'))
 app.use(
   cors({
     origin: `http://localhost:5173`,

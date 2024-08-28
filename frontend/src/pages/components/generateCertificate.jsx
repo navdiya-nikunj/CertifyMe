@@ -24,8 +24,8 @@ export default function GenerateCertificate() {
     location.state;
   // console.log(template);
   useEffect(() => {
-    console.log(import.meta.env.VITE_EMAILJS_SERVICE_ID)
-  },[])
+    console.log(import.meta.env.VITE_EMAILJS_SERVICE_ID);
+  }, []);
   const [formData, setFormData] = useState({
     studentName: "",
     studentWallet: "",
@@ -45,7 +45,7 @@ export default function GenerateCertificate() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(typeof window.ethereum === 'undefined'){
+    if (typeof window.ethereum === "undefined") {
       toast.error("Please install metamask", {
         position: "bottom-center",
         autoClose: 5000,
@@ -55,115 +55,122 @@ export default function GenerateCertificate() {
         draggable: true,
         progress: undefined,
       });
-    setFormData({ studentName: "", studentWallet: "", eventName: "", studentEmail: "" });
+      setFormData({
+        studentName: "",
+        studentWallet: "",
+        eventName: "",
+        studentEmail: "",
+      });
       return;
     }
 
-    const res = await window.ethereum.request({ method: 'eth_chainId' }).then((chainId) => {
-    if (chainId !== '80001' && chainId !== "0x13881") { // Mumbai network ID
-      toast.error("Please switch Metamask network to Mumbai", {
-        position: "bottom-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      return false;
-    }
-    return true;
-  });
-  if(!res){
-    return;
-  }
+    // const chainId = await window.ethereum.request({ method: "eth_chainId" });
+
+    // if (chainId !== "80001" && chainId !== "0x13881") {
+    //   // Mumbai network ID
+    //   toast.error("Please switch Metamask network to Mumbai", {
+    //     position: "bottom-center",
+    //     autoClose: 5000,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //   });
+    //   return false;
+    // }
 
     setIsLoading(true);
     const imgData = await downloadPDF();
-    await uploadimgToIPFS(imgData).then((res) => {
-      console.log("res.data", res.data.IpfsHash);
-      uploadMetadatatoIPFS(res.data.IpfsHash).then((res) => {
-        contractCall(res.data.IpfsHash);
-      });
-      setDate(dayjs());
-      setFormData({ studentName: "", studentWallet: "", eventName: "", studentEmail: "" });
+    console.log("connect", imgData);
+    const res = await uploadimgToIPFS(imgData);
+    console.log("res.data", res.data.IpfsHash);
+    const res2 = await uploadMetadatatoIPFS(res.data.IpfsHash);
+    await contractCall(res2.data.IpfsHash);
+
+    setDate(dayjs());
+    setFormData({
+      studentName: "",
+      studentWallet: "",
+      eventName: "",
+      studentEmail: "",
     });
   };
 
   const contractCall = async (hash) => {
     const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
     try {
-      await window.ethereum
-        .request({ method: "eth_requestAccounts" })
-        .then((accounts) => {
-          const web3 = new Web3(window.ethereum);
-          const contract = new web3.eth.Contract(CertiABI, contractAddress);
-          contract.methods
-            .safeMint(formData.studentWallet, "https://ipfs.io/ipfs/" + hash)
-            .send({ from: accounts[0] })
-            .then((transaction, error) => {
-              console.log(transaction);
-              setIsLoading(false);
-              toast.success("Certificate Generated ", {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                transition: Slide,
-              });
-              console.log(formData);
-              
-              var data = {
-                service_id: import.meta.env.VITE_EMAILJS_SERVICE_ID,
-                template_id: import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-                user_id: import.meta.env.VITE_EMAILJS_USER_ID,
-                template_params: {
-                  to_name: formData.studentName,
-                  eventName: formData.eventName,
-                  instituteName: instituteName,
-                  certificateDesc:
-                    formData.studentName +
-                    " " +
-                    description +
-                    formData.eventName,
-                  date: date,
-                  student_email: formData.studentEmail,
-                  certificateID: import.meta.env.VITE_CONTRACT_ADDRESS+"/"+transaction.events.Transfer.returnValues[2],
-                },
-              };
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
 
-              axios
-                .post("https://api.emailjs.com/api/v1.0/email/send", data, {
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                })
-                .then((response) => {
-                  alert("Your mail is sent!");
-                })
-                .catch((error) => {
-                  alert("Oops... " + error);
-                });
+      const web3 = new Web3(window.ethereum);
+      const contract = new web3.eth.Contract(CertiABI, contractAddress);
+      contract.methods
+        .awardItem(formData.studentWallet, "https://ipfs.io/ipfs/" + hash)
+        .send({ from: accounts[0] })
+        .then((transaction, error) => {
+          console.log(transaction);
+          setIsLoading(false);
+          toast.success("Certificate Generated ", {
+            position: "bottom-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Slide,
+          });
+          console.log(formData);
+
+          var data = {
+            service_id: import.meta.env.VITE_EMAILJS_SERVICE_ID,
+            template_id: import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+            user_id: import.meta.env.VITE_EMAILJS_USER_ID,
+            template_params: {
+              to_name: formData.studentName,
+              eventName: formData.eventName,
+              instituteName: instituteName,
+              certificateDesc:
+                formData.studentName + " " + description + formData.eventName,
+              date: date,
+              student_email: formData.studentEmail,
+              certificateID:
+                import.meta.env.VITE_CONTRACT_ADDRESS +
+                "/" +
+                transaction.events.Transfer.returnValues[2],
+            },
+          };
+
+          axios
+            .post("https://api.emailjs.com/api/v1.0/email/send", data, {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+            .then((response) => {
+              alert("Your mail is sent!");
             })
             .catch((error) => {
-              setIsLoading(false);
-              console.log(error);
-              toast.error("Please check student wallet address again", {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                transition: Slide,
-              });
+              alert("Oops... " + error);
             });
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          console.log(error);
+          toast.error("Please check student wallet address again", {
+            position: "bottom-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Slide,
+          });
         });
     } catch (error) {
       setIsLoading(false);
@@ -183,8 +190,10 @@ export default function GenerateCertificate() {
   };
 
   const uploadimgToIPFS = async (imgData) => {
+    console.log("helloooo", JWT);
     const image = new FormData();
-    const blob = await (await fetch(imgData)).blob();
+    const imageData = await fetch(imgData);
+    const blob = await imageData.blob();
     image.append("file", blob);
     try {
       const res = await axios.post(
@@ -222,7 +231,8 @@ export default function GenerateCertificate() {
         name: formData.studentName,
         description:
           formData.studentName + " " + description + formData.eventName,
-        image: "https://ipfs.io/ipfs/" + hash,
+        image:
+          "https://tomato-geographical-pig-904.mypinata.cloud/ipfs/" + hash,
         attributes: [
           { trait_type: "instituteName", value: instituteName },
           { trait_type: "Date", value: date },

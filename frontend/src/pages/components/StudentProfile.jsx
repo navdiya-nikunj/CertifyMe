@@ -49,29 +49,29 @@ export default function StudentProfile({ student }) {
     try {
       setLoading(true);
       if (window.ethereum) {
-        const res = await window.ethereum.request({ method: "eth_chainId" }).then((chainId) => {
-        console.log(chainId);
-        if (chainId !== '80001' && chainId !== "0x13881") {
-          toast.error("Please switch MetaMask network to Polygon", {
-            position: "bottom-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Slide,
-          });
-          // setLoading(false);
-          return false;
-        }else {
-          return true;
-        }
-      });
-        if(!res){
-          return;
-        }
+        // const res = await window.ethereum.request({ method: "eth_chainId" }).then((chainId) => {
+        // console.log(chainId);
+        // if (chainId !== '80001' && chainId !== "0x13881") {
+        //   toast.error("Please switch MetaMask network to Polygon", {
+        //     position: "bottom-center",
+        //     autoClose: 5000,
+        //     hideProgressBar: false,
+        //     closeOnClick: true,
+        //     pauseOnHover: true,
+        //     draggable: true,
+        //     progress: undefined,
+        //     theme: "colored",
+        //     transition: Slide,
+        //   });
+        //   // setLoading(false);
+        //   return false;
+        // }else {
+        //   return true;
+        // }
+        // });
+        //   if(!res){
+        //     return;
+        //   }
         await window.ethereum
           .request({ method: "eth_requestAccounts" })
           .then((accounts) => {
@@ -105,9 +105,7 @@ export default function StudentProfile({ student }) {
           });
         // setLoading(false);
       } else {
-
         toast.error("Please install MetaMask", {
-
           position: "bottom-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -207,7 +205,7 @@ export default function StudentProfile({ student }) {
               onClick={connectwallet}
             />
           </div>
-        </StyledPage>   
+        </StyledPage>
       )}
       {isConnected && !loading && certificatesData.length !== 0 ? (
         <StyledCardsDiv>
@@ -227,7 +225,7 @@ export default function StudentProfile({ student }) {
         </StyledCardsDiv>
       ) : (
         <>
-          {!loading && isConnected   && (
+          {!loading && isConnected && (
             <p>Sorry but you Don't Have any Certificates in your Profile.</p>
           )}
         </>

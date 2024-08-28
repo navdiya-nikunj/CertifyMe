@@ -3,18 +3,14 @@ import dayjs from "dayjs";
 // import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import "../../styles/certificate.css";
-import "../../styles/certificate-media.css"
+import "../../styles/certificate-media.css";
 // import Button from "../atoms/Button";
 
 const downloadPDF = async () => {
   const capture = document.querySelector(".certificate-container");
-  console.log("capture", capture);
-  return await html2canvas(capture).then((canvas) => {
-    const imgData = canvas.toDataURL("/img/png");
-    console.log("imgData in download pdf", imgData);
-    return imgData;
-
-  });
+  const canvas = await html2canvas(capture);
+  const imgData = canvas.toDataURL("/img/png");
+  return imgData;
 };
 
 const Certificate = ({

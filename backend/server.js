@@ -8,7 +8,7 @@ const port = process.env.PORT;
 app.use(express.static('../frontend/dist'))
 app.use(
   cors({
-    origin: `https://certifyme.club/`,
+    origin: `https://www.certifyme.club/`,
     allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept",
     credentials: true,
   })

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "",
+  baseURL: "https://certify-me-mu.vercel.app/",
 });
 
 export default instance;

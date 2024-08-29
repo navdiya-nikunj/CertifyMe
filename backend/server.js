@@ -8,7 +8,7 @@ const port = process.env.PORT;
 app.use(express.static('../frontend/dist'))
 app.use(
   cors({
-    origin: `https://certify-me-mu.vercel.app/`,
+    origin: `https://certifyme-flax.vercel.app/`,
     allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept",
     credentials: true,
   })

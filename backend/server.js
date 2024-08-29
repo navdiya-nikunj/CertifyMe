@@ -2,7 +2,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const app = express();
-require("./db/mongoose");
+require("./src/db/mongoose");
 const port = process.env.PORT;
 
 app.use(express.static('../frontend/dist'))

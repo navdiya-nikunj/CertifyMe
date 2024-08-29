@@ -1,9 +1,9 @@
 const app = require("./server");
-const authRouter = require("./routers/auth.routers");
-const profileRouter = require("./routers/profile.routers");
+const authRouter = require("./src/routers/auth.routers");
+const profileRouter = require("./src/routers/profile.routers");
 
 const passport = require("passport");
-const configurePassport = require("./config/passport");
+const configurePassport = require("./src/config/passport");
 configurePassport(passport);
 
 const authMiddleware = passport.authenticate("jwt", { session: false });

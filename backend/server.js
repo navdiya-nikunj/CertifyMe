@@ -13,13 +13,7 @@ app.use(
     credentials: true,
   })
 );
-app.use(
-  cors({
-    origin: `https://certifyme-flax.vercel.app/`,
-    allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept",
-    credentials: true,
-  })
-);
+
 app.use(express.json());
 app.use(cookieParser());
 

@@ -1,8 +1,10 @@
 import styled from "styled-components";
+import breakpoint from "styled-components-breakpoint";
 
 // Styled components
 const Container = styled.div`
   min-height: 100vh;
+  width: 100%;
   background-size: cover;
   display: flex;
   flex-direction: column;
@@ -31,14 +33,19 @@ const Container = styled.div`
 `;
 
 const FormDiv = styled.div`
-  width: 50%;
-  height: 50%;
+  width: 80%;
+  height: 80%;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   padding: 1rem;
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
+
+  ${breakpoint('tablet')`
+    width: 50%;
+    height: 50%;
+  `}
 `;
 
 const ButtonDiv = styled.div`

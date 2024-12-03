@@ -6,7 +6,9 @@ const StyledDiv = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-
+   @media screen and (max-width: 768px) {
+    display: none;
+  }
 
   > form {
     padding: 2rem;

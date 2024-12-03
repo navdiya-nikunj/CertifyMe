@@ -1,6 +1,21 @@
 import styled from "styled-components";
 
+const MobileView = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    font-size: 1.5rem;
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+`;
+
 const StyledDiv = styled.div`
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
   margin: 0 30% 0 30%;
   height: 100vh;
   display: flex;
@@ -31,4 +46,4 @@ const StyledDiv = styled.div`
   }
 `;
 
-export { StyledDiv };
+export { StyledDiv, MobileView };

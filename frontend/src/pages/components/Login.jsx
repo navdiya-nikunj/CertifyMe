@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { saved as studentSaved } from "../../state/studentSlice";
@@ -7,12 +7,11 @@ import { restored as templateRestored } from "../../state/templateSlice";
 
 import Button from "../atoms/Button";
 import axios from "../../axiosConfig";
-import { StyledDiv } from "../../styles/jsx/login.styles";
+import { MobileView, StyledDiv } from "../../styles/jsx/login.styles";
 import textfieldTheme from "../../styles/jsx/textfield.styles";
 
 import TextField from "@mui/material/TextField";
 
-import loginImage from "/login.svg";
 
 import { FormControl } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
@@ -99,6 +98,10 @@ export default function Login() {
   }
 
   return (
+    <>
+    <MobileView>
+      This Application is not supported on mobile devices. Please use a desktop or laptop to access the application.
+    </MobileView>
     <StyledDiv>
       <form onSubmit={handleSubmit}>
         <h1>Welcome Back!!</h1>
@@ -161,5 +164,6 @@ export default function Login() {
         <ToastContainer />
       </form>
     </StyledDiv>
+    </>
   );
 }

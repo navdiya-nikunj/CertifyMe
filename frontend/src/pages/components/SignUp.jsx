@@ -24,7 +24,7 @@ import Checkbox from "@mui/material/Checkbox";
 import { toast, Slide, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useTheme } from "styled-components";
-import signupImage from "/signup.svg";
+import { MobileView } from "../../styles/jsx/login.styles";
 
 export default function SignUp() {
   const theme = useTheme();
@@ -96,6 +96,10 @@ export default function SignUp() {
   }
 
   return (
+    <>
+    <MobileView>
+            This Application is not supported on mobile devices. Please use a desktop or laptop to access the application.
+    </MobileView>
     <StyledDiv>
       <form onSubmit={handleSubmit}>
       <h1>Create an Account</h1>
@@ -175,5 +179,6 @@ export default function SignUp() {
         <ToastContainer />
       </form>
     </StyledDiv>
+    </>
   );
 }

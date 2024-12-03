@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { cleared as studentClear } from "../../state/studentSlice";
 import { cleared as instituteClear } from "../../state/instituteSlice";
@@ -16,7 +16,7 @@ import ContactForm from "./ContactUs";
 import Footer from "./Footer";
 
 import Button from "../atoms/Button";
-import { Link } from "react-router-dom";
+
 import registerImg from "/icons/register.svg";
 import certificateImg from "/icons/certificate.svg";
 import emailImg from "/icons/email.svg";
@@ -34,10 +34,9 @@ import {
   ImageDiv2,
   ImageDiv3,
   ContentDiv,
+  SectionImages
 } from "../../styles/jsx/home.styles";
-import { Application } from "@splinetool/runtime";
 
-// import anything from "../../../public/room_girl_reading_copy"
 export default function Home() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -77,7 +76,7 @@ export default function Home() {
       <Section>
         <UsageDiv>
           <h1>Why to use CertifyMe?</h1>
-          <div>
+          <SectionImages>
             <div>
               <ImageDiv1></ImageDiv1>
               <h3>Decentralize</h3>
@@ -98,7 +97,7 @@ export default function Home() {
                 a modern, secure, and verifiable way.
               </p>
             </div>
-          </div>
+          </SectionImages>
         </UsageDiv>
       </Section>
       <Section>
@@ -151,7 +150,7 @@ export default function Home() {
       <Section2>
         <FAQs>
           <h2>Frequently Asked Questions</h2>
-          <Accordion>
+          <Accordion style={{ width: "100%" }}>
             <AccordionSummary
               expandIcon={<ArrowDropDownIcon />}
               aria-controls="panel2-content"
@@ -166,7 +165,7 @@ export default function Home() {
               </Typography>
             </AccordionDetails>
           </Accordion>
-          <Accordion>
+          <Accordion style={{ width: "100%" }}>
             <AccordionSummary
               expandIcon={<ArrowDropDownIcon />}
               aria-controls="panel2-content"
@@ -181,7 +180,7 @@ export default function Home() {
               </Typography>
             </AccordionDetails>
           </Accordion>
-          <Accordion>
+          <Accordion style={{ width: "100%" }}>
             <AccordionSummary
               expandIcon={<ArrowDropDownIcon />}
               aria-controls="panel2-content"
@@ -203,7 +202,6 @@ export default function Home() {
           <h2>Get in Touch</h2>
           <p>Have a question or need assistance? Contact us!</p>
           <ContactForm />
-          <Link to="/aboutus">About Us</Link>
         </Contact>
       </Section2>
       <Footer />

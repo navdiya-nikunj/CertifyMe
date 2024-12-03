@@ -1,28 +1,16 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import theme from "../theme";
 import { Link } from "react-router-dom";
+import breakpoint from "styled-components-breakpoint";
 const Container = styled.div`
   font-family: ${theme.fonts.fontFamily};
   color: ${(props) => props.theme.light.text};
+  width: 100vw;
 `;
 
 const Section = styled.section`
-  height: 95vh;
   width: 100%;
-  /* padding: 50px 0;
-  background-color: ${(props) => props.theme.light.primary};
-  display: flex;
-  justify-content: center;
-  
-
-  > div {
-    width: 50%;
-  }
-  > div > img {
-    padding: 5rem;
-    height: 100%;
-    width: 100%;
-  } */
+  margin-bottom: 2rem;
 `;
 
 const ShortInfo = styled.div`
@@ -33,6 +21,7 @@ const ShortInfo = styled.div`
       rgba(0, 0, 0, 0.7)
     ),
     url("/homeBg.png");
+  background-size: contain;
   width: 100%;
   height: 100%;
   padding: 4rem;
@@ -42,25 +31,30 @@ const ShortInfo = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  font-size: 1.7rem;
+
+  > h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    ${breakpoint("tablet")`
+    font-size: 3rem;
+    `}
+  }
+  font-size: 1rem;
+
+  ${breakpoint("tablet")`
+    font-size: 2rem;
+    padding: 5rem;
+  `}
 `;
 
 const UsageDiv = styled.div`
-  margin: 2rem;
-  height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 
-  > div {
-    display: flex;
-    flex: 1 1 auto;
-    /* padding: 1rem; */
-  }
-
   > div > div {
     padding: 1rem;
-    width: 40%;
+    width: 100%;
   }
 
   p {
@@ -70,11 +64,13 @@ const UsageDiv = styled.div`
 
   h1 {
     font-size: 1.5rem;
+    align-self: center;
+    margin-bottom: 10px;
   }
 `;
 const ImageDiv1 = styled.div`
   background-image: url("./decentralized.jpg");
-  height: 55%;
+  height: 300px;
   width: 100%;
   background-position: center;
   background-size: cover;
@@ -82,13 +78,38 @@ const ImageDiv1 = styled.div`
   overflow: hidden;
 `;
 const ImageDiv3 = styled(ImageDiv1)`
+  height: 300px;
   background-image: url("./modern.jpg");
 `;
 
 const ImageDiv2 = styled(ImageDiv1)`
+  height: 300px;
   background-image: url("./secure.jpg");
 `;
 
+const SectionImages = styled.div`
+  display: flex;
+  padding: 1.5rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  ${breakpoint("tablet")`
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+  `}
+
+  > div {
+    min-height: 450px;
+    width: 100%;
+    border: 1px solid #ccc;
+  }
+
+  >div > h3 {
+    margin-top: 10px;
+  }
+`
 const Button = styled(Link)`
   background-color: ${(props) => props.theme.light.secondary};
   color: ${(props) => props.theme.light.secondaryText};
@@ -106,23 +127,31 @@ const Button = styled(Link)`
 `;
 
 const HowItWorks = styled.div`
-  height: 100vh;
-
+width: 100%;
   h2 {
     margin: 1rem;
   }
   > div {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    ${breakpoint('tablet')`
+    flex-direction: row;
     justify-content: space-around;
+    `}
   }
 
   > div > div > div {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    width: 100%;
   }
   img {
-    width: 6%;
+    width: 10%;
+    margin-bottom: 1rem;
   }
 `;
 
@@ -130,16 +159,21 @@ const ContentDiv = styled.div`
   border: 1px solid #444;
   border-radius: 10px;
   margin: 1rem;
-  width: 100%;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
+  min-width: 400px;
 `;
 
 const FAQs = styled.div`
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+  padding: 0;
   > h2 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
@@ -158,7 +192,9 @@ const Contact = styled.div`
 `;
 
 const Section2 = styled.section`
-  padding: 2rem 10rem 2rem 10rem;
+width: 100%;
+padding: 0 3rem;
+margin-bottom: 2rem;
 `;
 
 export {
@@ -175,4 +211,5 @@ export {
   ImageDiv2,
   ImageDiv3,
   ContentDiv,
+  SectionImages
 };

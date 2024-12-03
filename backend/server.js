@@ -8,11 +8,12 @@ const port = process.env.PORT;
 app.use(express.static('../frontend/dist'))
 app.use(
   cors({
-    origin: `https://certify-me-rho.vercel.app`,
+    origin: `https://www.certifyme.club`,
     allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept",
     credentials: true,
   })
 );
+
 app.use(express.json());
 app.use(cookieParser());
 

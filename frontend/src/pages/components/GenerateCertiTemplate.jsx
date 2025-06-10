@@ -10,7 +10,7 @@ export default function GerenrateCertiTemplate() {
   });
 
   const handleSubmit = () => {
-    console.log(certificateDesc, certificateName);
+    console.log(formData.certificateDesc, formData.certificateName);
   };
 
   function handleChange(e) {

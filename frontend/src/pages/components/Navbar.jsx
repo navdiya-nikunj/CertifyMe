@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 import {
   StyledNavbar,
   StyledNavLink,
@@ -7,12 +8,11 @@ import {
   NavButton,
 } from "../../styles/jsx/navbar.styles";
 import axios from "../../axiosConfig";
-import Button from "../atoms/Button";
 
 export default function Navbar({ user }) {
   const navigate = useNavigate();
 
-  const handleLogout = async (e) => {
+  const handleLogout = async () => {
     const message = await axios
       .post("/profile/logout", {}, { withCredentials: true })
       .then((res) =>
@@ -27,7 +27,7 @@ export default function Navbar({ user }) {
   return (
     <div>
       <StyledNavbar>
-        <StyledLogo src="/logo.png" alt="logo" />
+        <StyledLogo src="/logo.svg" alt="CertifyMe Logo" />
         <div>
           <StyledNavLink to="/">Home</StyledNavLink>
           <StyledNavLink to={`/profile/${user?._id}`}>Profile</StyledNavLink>
@@ -42,3 +42,9 @@ export default function Navbar({ user }) {
     </div>
   );
 }
+
+Navbar.propTypes = {
+  user: PropTypes.shape({
+    _id: PropTypes.string
+  })
+};

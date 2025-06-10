@@ -8,7 +8,7 @@ export default function MainNavbar() {
   return (
     <div>
       <StyledMainNavbar>
-        <StyledLogo src="/logo.png" alt="logo" />
+        <StyledLogo src="/logo.svg" alt="CertifyMe Logo" />
         <DesktopNavLinks>
           <StyledNavLink to="/">Home</StyledNavLink>
           <StyledNavLink to={`/verify`}>VerifyCertificate</StyledNavLink>

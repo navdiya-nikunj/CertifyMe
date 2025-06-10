@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Open+Sans|Pinyon+Script|Rochester");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap");
 
 * {
   margin: 0;
@@ -7,167 +7,277 @@
   line-height: 1.5;
 }
 
-/*1. Text Styling*/
-
+/* Text Styling */
 .sans {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .bold {
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .text-border {
-  font-style: italic;
-  border-bottom: 1px solid rgb(44, 42, 42);
-  padding: 1px;
+  font-style: normal;
+  border-bottom: 2px solid #2c3e50;
+  padding: 4px 8px;
+  display: inline-block;
+  margin: 0 4px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* 2. Container parent styling*/
+/* Container parent styling */
 .certificate-container {
   position: relative;
-  width: 90vw;
-  height: 100vh;
-  background-color: #fff;
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0 auto;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  overflow: hidden;
 }
 
 .certificate-content {
   margin: 2rem;
-  width: 90%;
-  height: 95%;
+  width: calc(100% - 4rem);
+  min-height: 600px;
   text-align: center;
-  border: 5px solid #ffd700;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 5rem;
+  border: 4px solid #2c3e50;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 3rem;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  position: relative;
+  box-shadow: inset 0 0 0 8px #3498db20;
 }
-/* 3.Header Styling */
+
+/* Header Styling */
 .institute-title {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-family: "Poppins", sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+}
+
+.institute-title::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #3498db, #2c3e50);
+  margin: 0.5rem auto;
+  border-radius: 2px;
 }
 
 .certificate-title {
-  font-size: 2rem;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  text-transform: capitalize;
-  font-family: "Pinyon Script", cursive;
-  letter-spacing: 2px;
-  margin: 0 1rem 1.5rem 1rem;
+  font-family: "Dancing Script", cursive;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 1rem 0 2rem 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  position: relative;
 }
 
 .student-name {
-  font-family: "Rochester";
-  letter-spacing: 2px;
-  margin-bottom: 0.5rem;
-  color: #000080;
-  /* font-weight: bold; */
+  font-family: "Poppins", sans-serif;
+  letter-spacing: 1px;
+  margin: 1.5rem 0;
+  color: #2c3e50;
+  font-weight: 600;
 }
+
 .student-name > span {
-  font-size: 2rem;
+  font-size: 2.25rem;
+  color: #3498db;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 .certificate-text {
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  font-family: "Inter", sans-serif;
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+  line-height: 1.8;
+  max-width: 90%;
 }
 
-/* 4. Footer styling*/
+/* Footer styling */
 .certificate-footer {
-  width: 80%;
-  height: 35%;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  margin-top: 3rem;
+  padding: 0 2rem;
 }
 
 .certificate-date {
-  line-height: 1.8;
-  font-size: 1rem;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  line-height: 1.6;
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2c3e50;
+  text-align: center;
 }
 
 .certificate-signature {
-  line-height: 1.8;
-  font-size: 1rem;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  line-height: 1.6;
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2c3e50;
+  text-align: center;
 }
 
-span {
-  font-size: 1.5rem;
-  font-weight: normal;
+.certificate-date span,
+.certificate-signature span {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2c3e50;
+  display: block;
+  margin-bottom: 0.5rem;
 }
 
-/* 5. Border Styling */
+/* Border Styling */
 .border-left {
-  border-top: 2rem solid #000080;
-  border-left: 2.5rem solid #000080;
   position: absolute;
-  width: 50%;
-  height: 50%;
   top: 0;
-  left: 2.5rem;
-  overflow: hidden;
+  left: 0;
+  width: 60px;
+  height: 60px;
+  border-top: 3px solid #3498db;
+  border-left: 3px solid #3498db;
+  border-top-left-radius: 12px;
 }
+
 .border-right {
-  border-bottom: 2rem solid #000080;
-  border-right: 2.5rem solid #000080;
   position: absolute;
-  width: 50%;
-  height: 50%;
   bottom: 0;
-  right: 2.5rem;
-  overflow: hidden;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  border-bottom: 3px solid #3498db;
+  border-right: 3px solid #3498db;
+  border-bottom-right-radius: 12px;
 }
 
 .certificate-ribbon-top {
   position: absolute;
-  top: -1.2rem;
-  left: -7rem;
-  width: 50%;
-  height: 50%;
-  background: linear-gradient(to bottom right, #ffc107, #ffa000);
-  border-radius: 50% 0 0 50% / 50% 30% 30% 50%;
-  transform: rotate(-45deg);
-}
-.certificate-ribbon-bottom {
-  position: absolute;
-  bottom: -1rem;
-  right: -8rem;
-  width: 50%;
-  height: 50%;
-  background: linear-gradient(to top left, #ffc107, #ffa000);
-  border-radius: 50% 0 0 50% / 50% 30% 30% 50%;
-  transform: rotate(-35deg);
+  top: 10px;
+  left: 10px;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  border-radius: 50%;
 }
 
-/* 6. Button styling */
+.certificate-ribbon-bottom {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  border-radius: 50%;
+}
+
+/* Decorative elements */
+.certificate-content::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #3498db, transparent);
+}
+
+.certificate-content::after {
+  content: '';
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #3498db, transparent);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .certificate-container {
+    width: 95%;
+    margin: 1rem auto;
+  }
+  
+  .certificate-content {
+    margin: 1rem;
+    padding: 2rem 1.5rem;
+    min-height: 500px;
+  }
+  
+  .institute-title {
+    font-size: 1.5rem;
+  }
+  
+  .certificate-title {
+    font-size: 2.5rem;
+  }
+  
+  .student-name > span {
+    font-size: 1.75rem;
+  }
+  
+  .certificate-text {
+    font-size: 1rem;
+  }
+  
+  .certificate-footer {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+}
+
+/* Button styling */
 .download {
-  margin: 20px;
+  margin: 20px 0;
+  text-align: center;
 }
+
 .download-btn {
-  font-size: 15px;
-  border-radius: 20px;
-  padding: 4px 8px;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 12px 24px;
   cursor: pointer;
-  border: 2px solid #aaa59f;
-  color: #c96c01;
-  background-color: white;
+  border: 2px solid #3498db;
+  color: #3498db;
+  background-color: transparent;
+  transition: all 0.3s ease;
 }
+
 .download-btn:hover {
-  transform: translate(-3px, -3px);
-  border: 2px solid #c96c01;
-  background-color: #fff;
+  background-color: #3498db;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
 }

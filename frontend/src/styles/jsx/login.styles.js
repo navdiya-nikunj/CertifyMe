@@ -1,48 +1,63 @@
 import styled from "styled-components";
+import theme from "../theme";
+import breakpoint from "styled-components-breakpoint";
 
 const MobileView = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-    font-size: 1.5rem;
-  @media screen and (min-width: 768px) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  font-size: 1.5rem;
+  color: ${theme.light.colors.textPrimary};
+  text-align: center;
+  padding: ${theme.light.spacing.xl};
+  background: ${theme.light.colors.backgroundLight};
+  
+  ${breakpoint("tablet")`
     display: none;
-  }
+  `}
 `;
 
 const StyledDiv = styled.div`
-
-  @media screen and (max-width: 768px) {
+  ${breakpoint("mobile")`
     display: none;
-  }
-  margin: 0 30% 0 30%;
-  height: 100vh;
+  `}
+  
+  min-height: 100vh;
   display: flex;
   align-items: center;
-  flex-direction: column;
+  justify-content: center;
+  background: ${theme.light.gradients.educational};
+  padding: ${theme.light.spacing.xl};
   
   > form {
-    padding: 2rem;
+    background: ${theme.light.colors.background};
+    padding: ${theme.light.spacing.xxl};
+    border-radius: ${theme.light.borderRadius.xl};
+    box-shadow: ${theme.light.shadows.large};
+    width: 100%;
+    max-width: 500px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    
-    height: 100%;
-    width: 100%;
   }
   
   > form > h1 {
-    font-family: ${(props) => props.theme.fonts.fontFamily};
-    margin: 1rem;
-    font-size: 2rem;
+    font-family: ${theme.fonts.headingFamily};
+    margin-bottom: ${theme.light.spacing.lg};
+    font-size: ${theme.fonts.headingSizes.h2};
+    color: ${theme.light.colors.primary};
+    text-align: center;
   }
 
   > form > h4 {
-    margin-bottom: 1rem;
-    text-align: left;
-    font-size: 1rem;
+    margin-bottom: ${theme.light.spacing.lg};
+    text-align: center;
+    font-size: 0.9rem;
+    color: ${theme.light.colors.textSecondary};
+    line-height: 1.5;
+    max-width: 400px;
   }
 `;
 

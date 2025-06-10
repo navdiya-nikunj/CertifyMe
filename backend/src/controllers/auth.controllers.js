@@ -17,7 +17,7 @@ const postSignup = async (req, res) => {
       res.cookie("institute-token", result.jwt, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
-        sameSite: "None",
+        sameSite: "lax",
         secure: process.env.NODE_ENV === "production",
       });
 
@@ -25,7 +25,7 @@ const postSignup = async (req, res) => {
       res.cookie("student-token", result.jwt, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
-        sameSite: "None",
+        sameSite: "lax",
         secure: process.env.NODE_ENV === "production",
       });
     }
@@ -41,14 +41,14 @@ const postLogin = async (req, res) => {
       res.cookie("institute-token", result.jwt, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
-        sameSite: "None",
+        sameSite: "lax",
         secure: process.env.NODE_ENV === "production",
       });
     } else {
       res.cookie("student-token", result.jwt, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
-        sameSite: "None",
+        sameSite: "lax",
         secure: process.env.NODE_ENV === "production",
       });
     }

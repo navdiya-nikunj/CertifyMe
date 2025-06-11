@@ -11,10 +11,8 @@ const wagmiAdapter = new WagmiAdapter({
     ssr: true,
     networks: [mainnet, arbitrum, polygon, sepolia],
     transports: {
-        [mainnet.id]: http(),
-        [sepolia.id]: http(),
-        [polygon.id]: http(),
-        [polygonMumbai.id]: http(),
+        [mainnet.id]: http("https://eth-mainnet.g.alchemy.com/v2/nZhWYeHsolUlobuwfRYcFGmyI3BeFPdV"),
+        [sepolia.id]: http("https://eth-sepolia.g.alchemy.com/v2/nZhWYeHsolUlobuwfRYcFGmyI3BeFPdV"),
     },
     projectId
 })

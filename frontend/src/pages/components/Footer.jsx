@@ -129,10 +129,10 @@ const Footer = () => (
       <FooterSection>
         <h3>Platform</h3>
         <FooterLinks>
-          <FooterLink href="/signup">Get Started</FooterLink>
-          <FooterLink href="/verify">Verify Certificate</FooterLink>
-          <FooterLink href="/aboutus">About Us</FooterLink>
-          <FooterLink href="#features">Features</FooterLink>
+          <FooterLink to="/signup">Get Started</FooterLink>
+          <FooterLink to="/verify">Verify Certificate</FooterLink>
+          <FooterLink to="/aboutus">About Us</FooterLink>
+          <FooterLink to="#features">Features</FooterLink>
         </FooterLinks>
       </FooterSection>
       

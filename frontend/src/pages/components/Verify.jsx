@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import theme from "../../styles/theme";
 import CertiABI from "../../certificate.json";
 import Btn from "../atoms/Button";
 import TextField from "@mui/material/TextField";
-import Web3 from "web3";
 import axios from "axios";
 import textfieldTheme from "../../styles/jsx/textfield.styles";
 import { toast, Slide, ToastContainer } from "react-toastify";
@@ -13,6 +12,8 @@ import VerifiedIcon from "@mui/icons-material/Verified";
 import ErrorIcon from "@mui/icons-material/Error";
 import SearchIcon from "@mui/icons-material/Search";
 import LaunchIcon from "@mui/icons-material/Launch";
+import { useReadContract } from "wagmi";
+import { sepolia } from "viem/chains";
 
 const Container = styled.div`
   min-height: 90vh;
@@ -188,6 +189,9 @@ export default function VerifyCertificate() {
   const [blockExplorerLink, setBlockExplorerLink] = useState("");
   const [openseaLink, setOpenSeaLink] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [id, setId] = useState("");
+
+  const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
 
   function handleChange(e) {
     const value = e?.target?.value;
@@ -198,42 +202,17 @@ export default function VerifyCertificate() {
     setOpenSeaLink("");
   }
 
-  const handleVerification = async () => {
-    if (!window.ethereum || !certificateId.trim()) {
-      setVerificationResult("");
-      toast.error(
-        "Please install a Web3 wallet (MetaMask) and enter a valid Certificate ID",
-        {
-          position: "bottom-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          transition: Slide,
-        }
-      );
-      return;
-    }
-
-    setIsLoading(true);
-    const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
+  const handleSuccess =async (url) => {
     try {
-      const web3 = new Web3(window.ethereum);
-      const contract = new web3.eth.Contract(CertiABI, contractAddress);
-      const tokenId = certificateId.split("/")[1];
-      const url = await contract.methods.tokenURI(tokenId).call();
 
       const res = await axios.get(url);
       setImage(res.data.image);
       setVerificationResult("Verified");
       setBlockExplorerLink(
-        `https://sepolia.etherscan.io/nft/${contractAddress}/${parseInt(tokenId)}`
+        `https://sepolia.etherscan.io/nft/${contractAddress}/${parseInt(id)}`
       );
       setOpenSeaLink(
-        `https://testnets.opensea.io/assets/sepolia/${contractAddress}/${parseInt(tokenId)}`
+        `https://testnets.opensea.io/assets/sepolia/${contractAddress}/${parseInt(id)}`
       );
       
       toast.success("Certificate verified successfully!", {
@@ -265,6 +244,66 @@ export default function VerifyCertificate() {
         transition: Slide,
       });
     }
+  }
+
+  const { data, error } = useReadContract({
+        address: contractAddress,
+        abi: CertiABI,
+        functionName: "tokenURI",
+        args: [BigInt(id)],
+        chainId: sepolia.id,
+        watch: true,
+        enabled: id !== "",
+      });
+  
+    useEffect(() => {
+      if(id !== "") {
+      if (data) {
+        console.log(data);
+        handleSuccess(data);
+      }
+
+      if (error) {
+        console.error(error);
+        toast.error("Error verifying certificate", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
+        setVerificationResult("Something went wrong");
+        setIsLoading(false);
+      }
+    }
+
+
+    }, [data, error, id]);
+  
+
+  const handleVerification = async () => {
+    if (!certificateId.trim()) {
+      setVerificationResult("");
+      toast.error(
+        "Please enter a valid Certificate ID",
+        {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Slide,
+        }
+      );
+      return;
+    }
+    setId(certificateId.split("/")[1]);
+
+    setIsLoading(true);
+    
   };
 
   return (
@@ -354,7 +393,7 @@ export default function VerifyCertificate() {
                   2. Enter the complete ID in the format: address/tokenId
                 </InstructionText>
                 <InstructionText>
-                  3. Click "Verify Certificate" to check authenticity
+                  3. Click &quot;Verify Certificate&quot; to check authenticity
                 </InstructionText>
                 <InstructionText>
                   4. View additional details on blockchain explorers if needed

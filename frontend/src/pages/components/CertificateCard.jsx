@@ -29,12 +29,17 @@ const StyledCard = styled(Card)`
   }
 `;
 
+const MediaContainer = styled.div`
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+`;
+
 const StyledCardMedia = styled(CardMedia)`
   && {
-    height: 220px;
+    height: 100%;
     background-size: cover;
     background-position: center;
-    position: relative;
   }
 `;
 
@@ -46,7 +51,8 @@ const StatusChip = styled(Chip)`
     background: ${theme.light.colors.success};
     color: ${theme.light.colors.textWhite};
     font-weight: 600;
-    z-index: 1;
+    z-index: 2;
+    box-shadow: ${theme.light.shadows.medium};
   }
 `;
 
@@ -107,7 +113,8 @@ const DownloadButton = styled(ActionButton)`
 export default function CertificateCard({ name, description, image, id }) {
   const [isDownloading, setIsDownloading] = useState(false);
   
-  const certificateId = `0x23d6E35159Cc6979667577d50F1148f30bb8E01/${id}`;
+  const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
+  const certificateId = `${contractAddress}/${id}`;
   const shortId = `${certificateId.slice(0, 20)}...${certificateId.slice(-8)}`;
 
   const downloadCertificate = async () => {
@@ -152,17 +159,18 @@ export default function CertificateCard({ name, description, image, id }) {
   return (
     <StyledCard>
       <CardActionArea onClick={openImage}>
-        <StyledCardMedia
-          component="img"
-          image={image}
-          alt={`Certificate for ${name}`}
-        >
+        <MediaContainer>
+          <StyledCardMedia
+            component="img"
+            image={image}
+            alt={`Certificate for ${name}`}
+          />
           <StatusChip 
             icon={<VerifiedIcon />} 
             label="Verified" 
             size="small"
           />
-        </StyledCardMedia>
+        </MediaContainer>
         
         <CardContent>
           <Typography 

@@ -8,6 +8,7 @@ import {
   NavButton,
 } from "../../styles/jsx/navbar.styles";
 import axios from "../../axiosConfig";
+import WalletButton from "./WalletButton";
 
 export default function Navbar({ user }) {
   const navigate = useNavigate();
@@ -34,9 +35,12 @@ export default function Navbar({ user }) {
           <StyledNavLink to={`/verify`}>Verify Certificate</StyledNavLink>
           {/* <StyledNavLink to={}>Log Out</StyledNavLink> */}
         </div>
-        <NavButton type="button" onClick={handleLogout}>
-          Log Out
-        </NavButton>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <WalletButton />
+          <NavButton type="button" onClick={handleLogout}>
+            Log Out
+          </NavButton>
+        </div>
       </StyledNavbar>
       <Outlet />
     </div>

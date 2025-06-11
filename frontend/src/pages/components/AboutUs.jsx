@@ -1,4 +1,4 @@
-import React from 'react';
+
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 import Footer from './Footer';
@@ -248,7 +248,7 @@ const AboutUsPage = () => {
             <p>Founder</p>
           </TeamMember>
           <TeamMember>
-            <h4>Khooshi Vora</h4>
+            <h4>Khushi Vora</h4>
             <p>Founder</p>
           </TeamMember>
           <TeamMember>

@@ -18,7 +18,10 @@
     "@mui/material": "^5.15.3",
     "@mui/x-date-pickers": "^6.19.2",
     "@reduxjs/toolkit": "^2.1.0",
+    "@reown/appkit": "^1.7.8",
+    "@reown/appkit-adapter-wagmi": "^1.7.8",
     "@splinetool/runtime": "^1.0.50",
+    "@tanstack/react-query": "^5.80.6",
     "axios": "^1.6.5",
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.1",
@@ -37,6 +40,8 @@
     "styled-components": "^6.1.8",
     "styled-components-breakpoint": "^3.0.0-preview.20",
     "validator": "^13.11.0",
+    "viem": "^2.31.0",
+    "wagmi": "^2.15.6",
     "web3": "^4.4.0"
   },
   "devDependencies": {

@@ -428,7 +428,7 @@ export default function InstituteProfile({ institute }) {
                 </ActionIcon>
                 <ActionTitle>Create Template</ActionTitle>
                 <ActionDescription>
-                  Design a new certificate template with your institution's branding and course details.
+                  Design a new certificate template with your institution&apos;s branding and course details.
                 </ActionDescription>
               </div>
               <Button text="Create Template" />

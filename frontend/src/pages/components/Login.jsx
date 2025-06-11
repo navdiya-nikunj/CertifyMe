@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { saved as studentSaved } from "../../state/studentSlice";
 import { saved as instituteSaved } from "../../state/instituteSlice";
@@ -336,7 +336,7 @@ export default function Login() {
               />
               
               <FooterLinks>
-                Don&apos;t have an account? <Link to="/signup">Sign up here</Link>
+                Don&apos;t have an account? <NavLink to="/signup">Sign up here</NavLink>
               </FooterLinks>
             </StyledForm>
           </FormSection>

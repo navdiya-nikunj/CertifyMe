@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import theme from '../../styles/theme';
+import { NavLink } from 'react-router-dom';
 
 const FooterContainer = styled.footer`
   background: ${theme.light.colors.primary};
@@ -42,7 +43,7 @@ const FooterLinks = styled.div`
   gap: ${theme.light.spacing.sm};
 `;
 
-const FooterLink = styled.a`
+const FooterLink = styled(NavLink)`
   color: ${theme.light.colors.textWhite};
   text-decoration: none;
   opacity: 0.8;

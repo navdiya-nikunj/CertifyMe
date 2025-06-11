@@ -37,7 +37,11 @@ import Certificate, { downloadPDF } from "./Certificate";
 import Button from "../atoms/Button";
 import axios from "axios";
 const JWT = import.meta.env.VITE_IPFS_JWT;
-import Web3 from "web3";
+import { useWallet } from "../../hooks/useWallet";
+import { useAppKit } from '@reown/appkit/react';
+import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { sepolia } from 'viem/chains';
+import { parseEventLogs } from 'viem';
 import CertiABI from "../../certificate.json";
 import LinearProgress from "@mui/material/LinearProgress";
 import { toast, Slide, ToastContainer } from "react-toastify";
@@ -220,9 +224,59 @@ export default function GenerateCertificate() {
   const [loadingStep, setLoadingStep] = useState("");
   const [date, setDate] = useState(dayjs());
 
+  // Wagmi and Reown hooks
+  const { address, isConnected } = useWallet();
+  const { open } = useAppKit();
+  const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
+
+  console.log('🏢 Institution Dashboard - Wallet Status:', { address, isConnected });
+  console.log('📋 Contract Address:', contractAddress);
+
+  // Contract write hook for awardItem function
+  const { 
+    data: transactionHash, 
+    error: writeError, 
+    isPending: isWritePending,
+    writeContract 
+  } = useWriteContract();
+
+  // Wait for transaction confirmation
+  const { 
+    isLoading: isConfirming, 
+    isSuccess: isConfirmed, 
+    error: confirmError,
+    data: transactionReceipt 
+  } = useWaitForTransactionReceipt({
+    hash: transactionHash,
+  });
+
   useEffect(() => {
-    console.log(import.meta.env.VITE_EMAILJS_SERVICE_ID);
+    console.log('📧 EmailJS Service ID:', import.meta.env.VITE_EMAILJS_SERVICE_ID);
   }, []);
+
+  // Handle transaction confirmation
+  useEffect(() => {
+    if (isConfirmed && transactionReceipt) {
+      console.log('✅ Transaction confirmed:', transactionReceipt);
+      handleTransactionSuccess(transactionReceipt);
+    }
+  }, [isConfirmed, transactionReceipt]);
+
+  // Handle write errors
+  useEffect(() => {
+    if (writeError) {
+      console.error('❌ Contract write error:', writeError);
+      handleContractError(writeError);
+    }
+  }, [writeError]);
+
+  // Handle confirmation errors
+  useEffect(() => {
+    if (confirmError) {
+      console.error('❌ Transaction confirmation error:', confirmError);
+      handleTransactionError(confirmError);
+    }
+  }, [confirmError]);
 
   function handleChange(e) {
     const value = e?.target?.value;
@@ -235,8 +289,30 @@ export default function GenerateCertificate() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (typeof window.ethereum === "undefined") {
-      toast.error("Please install MetaMask to generate blockchain certificates", {
+    console.log('🚀 Starting certificate generation process...');
+
+    // Check wallet connection
+    if (!isConnected) {
+      toast.error("Please connect your wallet first", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Slide,
+      });
+      
+      console.log('🔗 Opening wallet connection modal...');
+      open();
+      return;
+    }
+
+    // Validate wallet address format
+    if (!isValidWalletAddress(formData.studentWallet)) {
+      toast.error("Please enter a valid wallet address", {
         position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -254,38 +330,69 @@ export default function GenerateCertificate() {
     setActiveStep(2);
 
     try {
+      console.log('📋 Generating certificate image...');
       setLoadingStep("Generating certificate image...");
       const imgData = await downloadPDF();
       
-      setLoadingStep("Uploading to IPFS...");
-      const res = await uploadimgToIPFS(imgData);
+      console.log('☁️ Uploading image to IPFS...');
+      setLoadingStep("Uploading image to IPFS...");
+      const imageRes = await uploadimgToIPFS(imgData);
       
+      console.log('📄 Creating and uploading metadata...');
       setLoadingStep("Creating metadata...");
-      const res2 = await uploadMetadatatoIPFS(res.data.IpfsHash);
+      const metadataRes = await uploadMetadatatoIPFS(imageRes.data.IpfsHash);
       
+      console.log('⛓️ Recording on blockchain...');
       setLoadingStep("Recording on blockchain...");
-      await contractCall(res2.data.IpfsHash);
+      await callAwardItemContract(metadataRes.data.IpfsHash);
 
     } catch (error) {
-      console.error("Certificate generation failed:", error);
-      setIsLoading(false);
-      setActiveStep(1);
+      console.error("❌ Certificate generation failed:", error);
+      handleGenerationError(error);
     }
   };
 
-  const contractCall = async (hash) => {
-    const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
+  const callAwardItemContract = async (ipfsHash) => {
     try {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
+      const tokenURI = `https://ipfs.io/ipfs/${ipfsHash}`;
+      
+      console.log('📝 Calling awardItem contract function with:', {
+        studentWallet: formData.studentWallet,
+        tokenURI,
+        from: address
       });
 
-      const web3 = new Web3(window.ethereum);
-      const contract = new web3.eth.Contract(CertiABI, contractAddress);
+      // Call the contract function using Wagmi
+      writeContract({
+        address: contractAddress,
+        abi: CertiABI,
+        functionName: 'awardItem',
+        args: [formData.studentWallet, tokenURI],
+        chainId: sepolia.id,
+      });
+
+    } catch (error) {
+      console.error('❌ Error calling awardItem:', error);
+      throw new Error(`Failed to call contract: ${error.message}`);
+    }
+  };
+
+  const handleTransactionSuccess = async (receipt) => {
+    try {
+      console.log('🎉 Certificate successfully recorded on blockchain!');
       
-      const transaction = await contract.methods
-        .awardItem(formData.studentWallet, "https://ipfs.io/ipfs/" + hash)
-        .send({ from: accounts[0] });
+      // Parse the Transfer event to get the token ID
+      const transferEvent = parseEventLogs({
+        abi: CertiABI,
+        logs: receipt.logs,
+        eventName: 'Transfer'
+      });
+
+      let tokenId = null;
+      if (transferEvent && transferEvent.length > 0) {
+        tokenId = transferEvent[0].args.tokenId;
+        console.log('🎫 Certificate Token ID:', tokenId);
+      }
 
       setIsLoading(false);
       setLoadingStep("");
@@ -303,58 +410,145 @@ export default function GenerateCertificate() {
       });
 
       // Send email notification
-      const emailData = {
-        service_id: import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        template_id: import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-        user_id: import.meta.env.VITE_EMAILJS_USER_ID,
-        template_params: {
-          to_name: formData.studentName,
-          eventName: formData.eventName,
-          instituteName: instituteName,
-          certificateDesc: `${formData.studentName} ${description} ${formData.eventName}`,
-          date: date,
-          student_email: formData.studentEmail,
-          certificateID: `${contractAddress}/${transaction.events.Transfer.returnValues[2]}`,
-        },
-      };
-
       try {
-        await axios.post("https://api.emailjs.com/api/v1.0/email/send", emailData, {
-          headers: { "Content-Type": "application/json" },
-        });
-        toast.success("Certificate sent to student's email!");
+        console.log('📧 Sending email notification...');
+        await sendEmailNotification(tokenId);
       } catch (emailError) {
-        console.error("Email sending failed:", emailError);
+        console.error("📧 Email sending failed:", emailError);
         toast.warning("Certificate generated but email could not be sent.");
       }
 
       // Reset form
-      setDate(dayjs());
-      setFormData({
-        studentName: "",
-        studentWallet: "",
-        eventName: "",
-        studentEmail: "",
-      });
-      setActiveStep(0);
+      resetForm();
 
     } catch (error) {
+      console.error('❌ Error in transaction success handler:', error);
       setIsLoading(false);
       setLoadingStep("");
-      setActiveStep(1);
-      console.error("Blockchain transaction failed:", error);
-      toast.error("Please check the student wallet address and try again", {
-        position: "bottom-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        transition: Slide,
-      });
+      toast.error("Certificate was created but there was an error processing the result.");
     }
+  };
+
+  const sendEmailNotification = async (tokenId) => {
+    const emailData = {
+      service_id: import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      template_id: import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+      user_id: import.meta.env.VITE_EMAILJS_USER_ID,
+      template_params: {
+        to_name: formData.studentName,
+        eventName: formData.eventName,
+        instituteName: instituteName,
+        certificateDesc: `${formData.studentName} ${description} ${formData.eventName}`,
+        date: date.format('DD/MM/YYYY'),
+        student_email: formData.studentEmail,
+        certificateID: tokenId ? `${contractAddress}/${tokenId}` : `${contractAddress}/pending`,
+      },
+    };
+
+    console.log('📧 Sending email with data:', emailData);
+
+    await axios.post("https://api.emailjs.com/api/v1.0/email/send", emailData, {
+      headers: { "Content-Type": "application/json" },
+    });
+    
+    toast.success("Certificate sent to student's email!");
+  };
+
+  const handleContractError = (error) => {
+    setIsLoading(false);
+    setLoadingStep("");
+    setActiveStep(1);
+    
+    let errorMessage = "Failed to record certificate on blockchain";
+    
+    if (error.message.includes("User rejected")) {
+      errorMessage = "Transaction was rejected by user";
+    } else if (error.message.includes("insufficient funds")) {
+      errorMessage = "Insufficient funds for transaction";
+    } else if (error.message.includes("network")) {
+      errorMessage = "Network error. Please check your connection";
+    } else if (error.message.includes("nonce")) {
+      errorMessage = "Transaction nonce error. Please try again";
+    }
+    
+    console.error('💥 Contract error details:', error);
+    
+    toast.error(errorMessage, {
+      position: "bottom-center",
+      autoClose: 7000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      transition: Slide,
+    });
+  };
+
+  const handleTransactionError = (error) => {
+    setIsLoading(false);
+    setLoadingStep("");
+    setActiveStep(1);
+    
+    console.error('💥 Transaction confirmation error:', error);
+    
+    toast.error("Transaction failed during confirmation. Please try again.", {
+      position: "bottom-center",
+      autoClose: 7000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      transition: Slide,
+    });
+  };
+
+  const handleGenerationError = (error) => {
+    setIsLoading(false);
+    setLoadingStep("");
+    setActiveStep(1);
+    
+    let errorMessage = "Certificate generation failed";
+    
+    if (error.message.includes("IPFS")) {
+      errorMessage = "Failed to upload to IPFS. Please try again.";
+    } else if (error.message.includes("image")) {
+      errorMessage = "Failed to generate certificate image";
+    } else if (error.message.includes("metadata")) {
+      errorMessage = "Failed to create certificate metadata";
+    }
+    
+    console.error('💥 Generation error:', error);
+    
+    toast.error(errorMessage, {
+      position: "bottom-center",
+      autoClose: 7000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      transition: Slide,
+    });
+  };
+
+  const isValidWalletAddress = (address) => {
+    return /^0x[a-fA-F0-9]{40}$/.test(address);
+  };
+
+  const resetForm = () => {
+    setDate(dayjs());
+    setFormData({
+      studentName: "",
+      studentWallet: "",
+      eventName: "",
+      studentEmail: "",
+    });
+    setActiveStep(0);
   };
 
   const uploadimgToIPFS = async (imgData) => {
@@ -364,6 +558,7 @@ export default function GenerateCertificate() {
     image.append("file", blob);
     
     try {
+      console.log('☁️ Uploading image to Pinata IPFS...');
       const res = await axios.post(
         "https://api.pinata.cloud/pinning/pinFileToIPFS",
         image,
@@ -375,9 +570,10 @@ export default function GenerateCertificate() {
           },
         }
       );
+      console.log('✅ Image uploaded successfully:', res.data.IpfsHash);
       return res;
     } catch (error) {
-      console.error("IPFS upload failed:", error);
+      console.error("❌ IPFS image upload failed:", error);
       throw new Error("Failed to upload certificate to IPFS");
     }
   };
@@ -390,7 +586,9 @@ export default function GenerateCertificate() {
         image: `https://tomato-geographical-pig-904.mypinata.cloud/ipfs/${hash}`,
         attributes: [
           { trait_type: "instituteName", value: instituteName },
-          { trait_type: "Date", value: date },
+          { trait_type: "Date", value: date.format('DD/MM/YYYY') },
+          { trait_type: "Course", value: formData.eventName },
+          { trait_type: "Student", value: formData.studentName },
         ],
       },
       pinataMetadata: {
@@ -399,6 +597,7 @@ export default function GenerateCertificate() {
     });
 
     try {
+      console.log('📄 Uploading metadata to Pinata IPFS...');
       const res = await axios.post(
         "https://api.pinata.cloud/pinning/pinJSONToIPFS",
         data,
@@ -409,9 +608,10 @@ export default function GenerateCertificate() {
           },
         }
       );
+      console.log('✅ Metadata uploaded successfully:', res.data.IpfsHash);
       return res;
     } catch (error) {
-      console.error("Metadata upload failed:", error);
+      console.error("❌ Metadata upload failed:", error);
       throw new Error("Failed to upload metadata to IPFS");
     }
   };
@@ -421,25 +621,41 @@ export default function GenerateCertificate() {
       case 0:
         return formData.studentName.trim() !== "" && formData.studentEmail.trim() !== "";
       case 1:
-        return formData.studentWallet.trim() !== "" && formData.eventName.trim() !== "";
+        return formData.studentWallet.trim() !== "" && 
+               formData.eventName.trim() !== "" && 
+               isValidWalletAddress(formData.studentWallet);
       default:
         return false;
     }
   };
 
+  const getCurrentLoadingMessage = () => {
+    if (isWritePending) return "Submitting to blockchain...";
+    if (isConfirming) return "Waiting for confirmation...";
+    if (loadingStep) return loadingStep;
+    return "Processing...";
+  };
+
+  const isCurrentlyLoading = isLoading || isWritePending || isConfirming;
+
   return (
     <Container>
-      {isLoading && (
+      {isCurrentlyLoading && (
         <ProgressWrapper>
           <ProgressContent>
-            <ProgressText variant="h6">{loadingStep}</ProgressText>
+            <ProgressText variant="h6">{getCurrentLoadingMessage()}</ProgressText>
             <LinearProgress sx={{ borderRadius: 2, height: 8 }} />
+            {transactionHash && (
+              <Typography variant="body2" sx={{ mt: 1, color: theme.light.colors.textSecondary }}>
+                Transaction Hash: {transactionHash}
+              </Typography>
+            )}
           </ProgressContent>
         </ProgressWrapper>
       )}
 
       <Header>
-        <BackButton onClick={() => navigate(-1)}>
+        <BackButton onClick={() => navigate(-1)} disabled={isCurrentlyLoading}>
           <ArrowBackIcon />
         </BackButton>
         
@@ -470,8 +686,23 @@ export default function GenerateCertificate() {
               <h4>Signing Authority</h4>
               <p>{signature.name} - {signature.designation}</p>
             </InfoItem>
+            <InfoItem>
+              <h4>Connected Wallet</h4>
+              <p>{isConnected ? `${address?.slice(0, 6)}...${address?.slice(-4)}` : 'Not Connected'}</p>
+            </InfoItem>
           </InfoGrid>
         </TemplateInfo>
+
+        {!isConnected && (
+          <Alert severity="warning" sx={{ mb: 3 }}>
+            Please connect your wallet to generate certificates on the blockchain.
+            <Button 
+              text="Connect Wallet" 
+              onClick={() => open()} 
+              style={{ marginLeft: theme.light.spacing.md }}
+            />
+          </Alert>
+        )}
 
         <Grid container spacing={4}>
           <Grid item xs={12} lg={6}>
@@ -512,6 +743,7 @@ export default function GenerateCertificate() {
                           placeholder="Enter student's complete name"
                           fullWidth
                           required
+                          disabled={isCurrentlyLoading}
                           InputProps={{
                             startAdornment: <PersonIcon sx={{ mr: 1, color: theme.light.colors.textLight }} />,
                           }}
@@ -528,6 +760,7 @@ export default function GenerateCertificate() {
                           placeholder="student@example.com"
                           fullWidth
                           required
+                          disabled={isCurrentlyLoading}
                           InputProps={{
                             startAdornment: <EmailIcon sx={{ mr: 1, color: theme.light.colors.textLight }} />,
                           }}
@@ -552,13 +785,19 @@ export default function GenerateCertificate() {
                           value={formData.studentWallet}
                           onChange={handleChange}
                           label="Student Wallet Address"
-                          placeholder="0x... (MetaMask wallet address)"
+                          placeholder="0x... (Wallet address where NFT will be sent)"
                           fullWidth
                           required
+                          disabled={isCurrentlyLoading}
+                          error={formData.studentWallet && !isValidWalletAddress(formData.studentWallet)}
                           InputProps={{
                             startAdornment: <AccountBalanceWalletIcon sx={{ mr: 1, color: theme.light.colors.textLight }} />,
                           }}
-                          helperText="The blockchain wallet where the certificate NFT will be sent"
+                          helperText={
+                            formData.studentWallet && !isValidWalletAddress(formData.studentWallet)
+                              ? "Please enter a valid Ethereum wallet address"
+                              : "The blockchain wallet where the certificate NFT will be sent"
+                          }
                         />
                       </Grid>
                       <Grid item xs={12}>
@@ -572,6 +811,7 @@ export default function GenerateCertificate() {
                           placeholder="e.g., Advanced React Development"
                           fullWidth
                           required
+                          disabled={isCurrentlyLoading}
                           InputProps={{
                             startAdornment: <EventIcon sx={{ mr: 1, color: theme.light.colors.textLight }} />,
                           }}
@@ -587,6 +827,7 @@ export default function GenerateCertificate() {
                               format="DD/MM/YYYY"
                               required
                               fullWidth
+                              disabled={isCurrentlyLoading}
                               sx={textfieldTheme}
                             />
                           </DemoContainer>
@@ -611,6 +852,22 @@ export default function GenerateCertificate() {
                       Certificate is being generated and recorded on the blockchain. 
                       This may take a few minutes.
                     </Alert>
+                    
+                    {transactionHash && (
+                      <Alert severity="info" sx={{ mt: 2 }}>
+                        <strong>Transaction submitted:</strong><br />
+                        Hash: {transactionHash}
+                        <br />
+                        <a 
+                          href={`https://sepolia.etherscan.io/tx/${transactionHash}`} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          style={{ color: theme.light.colors.secondary }}
+                        >
+                          View on Etherscan
+                        </a>
+                      </Alert>
+                    )}
                   </FieldGroup>
                 )}
 
@@ -618,7 +875,7 @@ export default function GenerateCertificate() {
 
                 <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                   <Button
-                    disabled={activeStep === 0 || isLoading}
+                    disabled={activeStep === 0 || isCurrentlyLoading}
                     onClick={() => setActiveStep((prevActiveStep) => prevActiveStep - 1)}
                     text="Back"
                     sx={{ mr: 1 }}
@@ -629,8 +886,8 @@ export default function GenerateCertificate() {
                   ) : activeStep === 1 ? (
                     <Button
                       type="submit"
-                      text={isLoading ? "Generating..." : "Generate Certificate"}
-                      disabled={!canProgress() || isLoading}
+                      text={isCurrentlyLoading ? getCurrentLoadingMessage() : "Generate Certificate"}
+                      disabled={!canProgress() || isCurrentlyLoading || !isConnected}
                     />
                   ) : (
                     <Button

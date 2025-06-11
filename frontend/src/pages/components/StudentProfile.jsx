@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import styled from "styled-components";
 import theme from "../../styles/theme";
 import Button from "../atoms/Button";
 import axios from "../../axiosConfig";
-import Web3 from "web3";
+import { useWallet } from "../../hooks/useWallet";
+import { useAppKit } from '@reown/appkit/react';
+import { useReadContract } from 'wagmi';
+import { sepolia } from 'viem/chains';
 import certiABI from "../../certificate.json";
 import CertificateCard from "./CertificateCard";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -11,7 +14,8 @@ import { toast, Slide, ToastContainer } from "react-toastify";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import SchoolIcon from "@mui/icons-material/School";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
-import { Card, CardContent, Chip } from "@mui/material";
+import { Card, CardContent } from "@mui/material";
+import PropTypes from "prop-types";
 
 const Container = styled.div`
   min-height: 90vh;
@@ -59,26 +63,7 @@ const WalletSection = styled.div`
   text-align: center;
 `;
 
-const WalletStatus = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: ${theme.light.spacing.md};
-  margin-bottom: ${theme.light.spacing.lg};
-  padding: ${theme.light.spacing.lg};
-  background: ${theme.light.colors.backgroundLight};
-  border-radius: ${theme.light.borderRadius.medium};
-`;
 
-const ConnectedAddress = styled.div`
-  font-family: monospace;
-  background: ${theme.light.colors.success}20;
-  color: ${theme.light.colors.success};
-  padding: ${theme.light.spacing.md};
-  border-radius: ${theme.light.borderRadius.medium};
-  border: 2px solid ${theme.light.colors.success};
-  word-break: break-all;
-`;
 
 const WalletConnectSection = styled.div`
   display: flex;
@@ -195,121 +180,166 @@ const StatLabel = styled.div`
 
 export default function StudentProfile({ student }) {
   const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
-  const [walletAddress, setWalletAddress] = useState("");
-  const [isConnected, setIsConnected] = useState(false);
   const [certificateIDs, setCertificateIDs] = useState([]);
   const [certificatesData, setCertificatesData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [lastFetchedAddress, setLastFetchedAddress] = useState(null);
+  const [certificateCache, setCertificateCache] = useState(new Map());
+
+  // Use Reown and Wagmi hooks
+  const { address, isConnected, isConnecting } = useWallet();
+  const { open } = useAppKit();
+
+  console.log('🔗 Wallet Status:', { address, isConnected, isConnecting });
+  console.log('📋 Contract Address:', contractAddress);
+
+  // First check the balance to see if user has any certificates
+  const { 
+    data: balance, 
+    error: balanceError, 
+    isLoading: balanceLoading 
+  } = useReadContract({
+    address: contractAddress,
+    abi: certiABI,
+    functionName: 'balanceOf',
+    args: [address],
+    chainId: sepolia.id,
+    enabled: isConnected && !!address,
+  });
+
+  console.log('💰 Balance Check:', { balance, balanceError, balanceLoading });
+
+  // Read certificates for the connected wallet (only if balance > 0)
+  const { 
+    data: certificates, 
+    error: certificatesError, 
+    isLoading: certificatesLoading,
+    refetch: refetchCertificates 
+  } = useReadContract({
+    address: contractAddress,
+    abi: certiABI,
+    functionName: 'getCertificates',
+    args: [address],
+    chainId: sepolia.id,
+    enabled: isConnected && !!address && balance && balance > 0n,
+  });
+
+  console.log('📜 Certificates Read Result:', { 
+    certificates, 
+    certificatesError, 
+    certificatesLoading 
+  });
+
+  // Memoized address check to prevent unnecessary refetches
+  const addressChanged = useMemo(() => {
+    return address !== lastFetchedAddress;
+  }, [address, lastFetchedAddress]);
 
   useEffect(() => {
-    showCertificates();
-  }, [isConnected]);
+    if (certificates && Array.isArray(certificates)) {
+      console.log('📋 Setting Certificate IDs:', certificates);
+      setCertificateIDs(certificates);
+      setLastFetchedAddress(address);
+    } else if (balance === 0n) {
+      console.log('💰 User has no certificates (balance is 0)');
+      setCertificateIDs([]);
+      setCertificatesData([]);
+      setLastFetchedAddress(address);
+    }
+  }, [certificates, balance, address]);
 
+  // Only fetch certificate data if IDs changed or we don't have cached data
   useEffect(() => {
-    fetchData();
-  }, [certificateIDs]);
-
-  const showCertificates = async () => {
-    if (isConnected) {
-      const web3 = new Web3(window.ethereum);
-      const contract = new web3.eth.Contract(certiABI, contractAddress);
-      await contract.methods
-        .getCertificates(walletAddress)
-        .call()
-        .then((res) => {
-          setCertificateIDs(res);
-        });
+    if (certificateIDs.length > 0 && (addressChanged || !hasCachedData(certificateIDs))) {
+      console.log('🔄 Fetching certificate data for IDs:', certificateIDs);
+      fetchCertificateData();
+    } else if (certificateIDs.length === 0) {
+      setCertificatesData([]);
+    } else if (hasCachedData(certificateIDs)) {
+      console.log('💾 Using cached certificate data');
+      const cachedCertificates = certificateIDs
+        .map(id => certificateCache.get(id.toString()))
+        .filter(cert => cert !== undefined);
+      setCertificatesData(cachedCertificates);
     }
-  };
+  }, [certificateIDs, addressChanged, certificateCache]);
 
-  const connectwallet = async () => {
-    try {
-      setLoading(true);
-      if (window.ethereum) {
-        await window.ethereum
-          .request({ method: "eth_requestAccounts" })
-          .then((accounts) => {
-            setWalletAddress(accounts[0]);
-            setIsConnected(true);
-            toast.success("Wallet Connected Successfully", {
-              position: "bottom-center",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-              transition: Slide,
-            });
-          })
-          .catch((error) => {
-            console.log(error);
-            toast.error(error.message, {
-              position: "bottom-center",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-              transition: Slide,
-            });
-          });
-      } else {
-        toast.error("Please install MetaMask", {
-          position: "bottom-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          transition: Slide,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong", {
-        position: "bottom-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        transition: Slide,
-      });
-    }
-    setLoading(false);
-  };
+  const hasCachedData = useCallback((ids) => {
+    return ids.every(id => certificateCache.has(id.toString()));
+  }, [certificateCache]);
 
-  const fetchData = async () => {
+  const fetchCertificateData = async () => {
     if (certificateIDs.length === 0) return;
     
+    console.log('📋 Starting to fetch certificate data for:', certificateIDs);
+    setLoading(true);
+    
     try {
-      const web3 = new Web3(window.ethereum);
-      const contract = new web3.eth.Contract(certiABI, contractAddress);
-      const certificateDataPromises = certificateIDs.map(
-        async (certificateId) => {
-          const url = await contract.methods.tokenURI(certificateId).call();
-          const response = await axios.get(url);
-          return response.data;
-        }
-      );
-
-      const certificatesDataArray = await Promise.all(certificateDataPromises);
-      let i = 0;
-      const finalData = certificatesDataArray.map((certificate) => {
-        certificate.id = certificateIDs[i];
-        i++;
-        return certificate;
+      // Import viem for direct contract calls
+      const { createPublicClient, http } = await import('viem');
+      
+      // Create a public client for reading contract data (using Sepolia as per existing code)
+      const publicClient = createPublicClient({
+        chain: sepolia,
+        transport: http(),
       });
-      setCertificatesData(finalData);
+
+      console.log('🔗 Using Sepolia network for contract reads');
+
+      // Filter out IDs that are already cached
+      const uncachedIDs = certificateIDs.filter(id => !certificateCache.has(id.toString()));
+      console.log('🆕 Uncached IDs to fetch:', uncachedIDs);
+
+      // Create promises for each uncached certificate ID to get tokenURI
+      const certificateDataPromises = uncachedIDs.map(async (certificateId) => {
+        console.log('🔍 Fetching tokenURI for certificate ID:', certificateId);
+        
+        try {
+          // Use viem to read tokenURI for each certificate
+          const tokenURI = await publicClient.readContract({
+            address: contractAddress,
+            abi: certiABI,
+            functionName: 'tokenURI',
+            args: [certificateId],
+          });
+
+          console.log('📋 TokenURI for certificate', certificateId, ':', tokenURI);
+
+          // Fetch the metadata from IPFS
+          const metadataResponse = await axios.get(tokenURI);
+          console.log('📋 Metadata for certificate', certificateId, ':', metadataResponse.data);
+
+          const certificateData = {
+            ...metadataResponse.data,
+            id: certificateId.toString(),
+            tokenId: certificateId.toString()
+          };
+
+          // Cache the result
+          setCertificateCache(prev => new Map(prev.set(certificateId.toString(), certificateData)));
+
+          return certificateData;
+        } catch (error) {
+          console.error('❌ Error fetching data for certificate', certificateId, ':', error);
+          return null;
+        }
+      });
+
+      console.log('⏳ Waiting for all certificate data promises to resolve...');
+      const newCertificatesData = await Promise.all(certificateDataPromises);
+      
+      // Filter out null values (failed requests)
+      const validNewCertificates = newCertificatesData.filter(cert => cert !== null);
+      console.log('✅ Successfully fetched new certificate data:', validNewCertificates);
+      
+      // Combine cached and new data
+      const allCertificates = certificateIDs
+        .map(id => certificateCache.get(id.toString()) || validNewCertificates.find(cert => cert.id === id.toString()))
+        .filter(cert => cert !== undefined);
+      
+      setCertificatesData(allCertificates);
     } catch (error) {
+      console.error('❌ Error fetching certificate data:', error);
       toast.error("Error fetching certificate data", {
         position: "bottom-center",
         autoClose: 5000,
@@ -321,11 +351,32 @@ export default function StudentProfile({ student }) {
         theme: "colored",
         transition: Slide,
       });
-      console.error("Error fetching certificate data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (loading) {
+  const handleConnectWallet = useCallback(() => {
+    console.log('🔗 Attempting to connect wallet...');
+    open();
+  }, [open]);
+
+  const handleRefresh = useCallback(async () => {
+    console.log('🔄 Refreshing certificates...');
+    // Clear cache for current address
+    const currentAddressCertificates = certificateIDs.map(id => id.toString());
+    setCertificateCache(prev => {
+      const newCache = new Map(prev);
+      currentAddressCertificates.forEach(id => newCache.delete(id));
+      return newCache;
+    });
+    
+    if (isConnected) {
+      await refetchCertificates();
+    }
+  }, [isConnected, refetchCertificates, certificateIDs]);
+
+  if (loading || certificatesLoading || balanceLoading || isConnecting) {
     return <LinearProgress />;
   }
 
@@ -353,45 +404,33 @@ export default function StudentProfile({ student }) {
               </WalletIcon>
               <h2>Connect Your Wallet</h2>
               <p>
-                Connect your MetaMask wallet to view and manage your blockchain certificates. 
+                Connect your wallet to view and manage your blockchain certificates. 
                 Your certificates are securely stored on the blockchain and linked to your wallet address.
               </p>
-              <Button text="Connect Wallet" onClick={connectwallet} />
+              <Button text="Connect Wallet" onClick={handleConnectWallet} />
             </WalletConnectSection>
           </WalletSection>
         ) : (
           <>
-            <WalletSection>
-              <WalletStatus>
-                <VerifiedUserIcon color="success" />
-                <Chip 
-                  label="Wallet Connected" 
-                  color="success" 
-                  variant="filled"
-                />
-              </WalletStatus>
-              <ConnectedAddress>
-                {walletAddress}
-              </ConnectedAddress>
-            </WalletSection>
+            
 
             <StatsGrid>
               <StatsCard>
                 <CardContent>
-                  <StatValue>{certificatesData.length}</StatValue>
-                  <StatLabel>Total Certificates</StatLabel>
+                  <StatValue>{balance?.toString() || '0'}</StatValue>
+                  <StatLabel>Blockchain Balance</StatLabel>
                 </CardContent>
               </StatsCard>
               <StatsCard>
                 <CardContent>
                   <StatValue>{certificateIDs.length}</StatValue>
-                  <StatLabel>Blockchain Records</StatLabel>
+                  <StatLabel>Certificate IDs Found</StatLabel>
                 </CardContent>
               </StatsCard>
               <StatsCard>
                 <CardContent>
-                  <StatValue>100%</StatValue>
-                  <StatLabel>Verification Rate</StatLabel>
+                  <StatValue>{certificatesData.length}</StatValue>
+                  <StatLabel>Certificates Loaded</StatLabel>
                 </CardContent>
               </StatsCard>
             </StatsGrid>
@@ -404,13 +443,43 @@ export default function StudentProfile({ student }) {
               <p>All your achievements, permanently recorded on the blockchain</p>
             </SectionHeader>
 
-            {certificatesData.length > 0 ? (
+            {balanceError && (
+              <EmptyState>
+                <h3>Error Checking Balance</h3>
+                <p>
+                  There was an error checking your certificate balance: {balanceError.message}
+                </p>
+                <Button text="Try Again" onClick={handleRefresh} />
+              </EmptyState>
+            )}
+
+            {certificatesError && !balanceError && (
+              <EmptyState>
+                <h3>Error Loading Certificate Details</h3>
+                <p>
+                  Your balance shows {balance?.toString()} certificates, but there was an error loading the details: {certificatesError.message}
+                </p>
+                <p style={{ fontSize: '0.9rem', color: theme.light.colors.textSecondary, marginTop: theme.light.spacing.sm }}>
+                  This might happen if you have certificates but the getCertificates function is not working. 
+                  The contract might need to be updated or there might be a network issue.
+                </p>
+                <Button text="Try Again" onClick={handleRefresh} />
+              </EmptyState>
+            )}
+
+            {!balanceError && !certificatesError && certificatesData.length > 0 ? (
               <CertificatesGrid>
                 {certificatesData.map((certificate, index) => (
-                  <CertificateCard key={index} certificate={certificate} />
-            ))}
+                  <CertificateCard 
+                    key={certificate.id || index}
+                    name={certificate.name}
+                    description={certificate.description}
+                    image={certificate.image}
+                    id={certificate.tokenId || certificate.id}
+                  />
+                ))}
               </CertificatesGrid>
-      ) : (
+            ) : !balanceError && !certificatesError && !loading && !certificatesLoading && !balanceLoading ? (
               <EmptyState>
                 <SchoolIcon style={{ fontSize: '4rem', color: theme.light.colors.textLight, marginBottom: theme.light.spacing.lg }} />
                 <h3>No Certificates Yet</h3>
@@ -418,13 +487,24 @@ export default function StudentProfile({ student }) {
                   You don&apos;t have any certificates yet. When institutions issue certificates 
                   to your wallet address, they will appear here automatically.
                 </p>
+                {balance === 0n && (
+                  <p style={{ fontSize: '0.9rem', color: theme.light.colors.textSecondary, marginTop: theme.light.spacing.sm }}>
+                    Balance confirmed: 0 certificates
+                  </p>
+                )}
               </EmptyState>
-          )}
-        </>
-      )}
+            ) : null}
+          </>
+        )}
       </CertificatesSection>
 
       <ToastContainer />
     </Container>
   );
 }
+
+StudentProfile.propTypes = {
+  student: PropTypes.shape({
+    fullName: PropTypes.string,
+  }),
+};

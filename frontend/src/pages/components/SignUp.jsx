@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { saved as studentSaved } from "../../state/studentSlice";
 import { saved as instituteSaved } from "../../state/instituteSlice";
@@ -249,7 +249,7 @@ export default function SignUp() {
     const submitData = {
       email: formData.email,
       password: formData.password,
-      ...(isInstitute ? { instituteName: formData.instituteName } : { fullName: formData.fullName })
+      ...(isInstitute && { instituteName: formData.instituteName })
     };
     
     try {
@@ -350,7 +350,7 @@ export default function SignUp() {
                 fullWidth
               />
 
-              {isInstitute ? (
+              {isInstitute && (
                 <TextField
                   sx={textfieldTheme}
                   name="instituteName"
@@ -362,19 +362,7 @@ export default function SignUp() {
                   required
                   fullWidth
                 />
-              ) : (
-                <TextField
-                  sx={textfieldTheme}
-                  name="fullName"
-                  label="Full Name"
-                  variant="outlined"
-                  onChange={handleChange}
-                  value={formData.fullName}
-                  disabled={isLoading}
-          required
-                  fullWidth
-        />
-              )}
+              ) }
               
               <FormControl variant="outlined" fullWidth>
           <InputLabel htmlFor="outlined-adornment-password">
@@ -459,7 +447,7 @@ export default function SignUp() {
               />
               
               <FooterLinks>
-                Already have an account? <Link to="/login">Sign in here</Link>
+                Already have an account? <NavLink to="/login">Sign in here</NavLink>
               </FooterLinks>
             </StyledForm>
           </FormSection>

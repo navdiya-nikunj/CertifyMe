@@ -74,5 +74,5 @@ Q: Can students share their certificates with employers?
 A: Yes, students can easily share their certificates with employers or institutions through the certificate id.
 
 ## 6. Contact Information
-For any inquiries or support, please contact us at email@example.com or visit our website at www.certifyme.com.
+For any inquiries or support, please contact us at nikunjmnavdiya@gmail.com or visit our website at www.certifyme.club.
 
